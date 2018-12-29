@@ -1,0 +1,9 @@
+exam:
+  bundlebase: /i18n/bundle
+  localeset: ru-RU
+  numberOfQuestions: 5
+  filename: quest.csv
+  defaultAge: 28
+spring:
+    banner:
+      location: banner.txt

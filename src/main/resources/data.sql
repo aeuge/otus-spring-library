@@ -1,0 +1,10 @@
+insert into genres (id, `genre`) values (1, 'Фантастика');
+insert into genres (id, `genre`) values (2, 'Боевик');
+insert into genres (id, `genre`) values (3, 'Стихи');
+insert into authors (id, `fio`) values (1, 'Пушкин Александр Сергеевич');
+insert into authors (id, `fio`) values (2, 'Лукьяненко Сергей Васильевич');
+insert into authors (id, `fio`) values (3, 'Эльтеррус Иар');
+insert into books (id, `title`,fk_genres,fk_authors) values (1, 'Отзвуки серебряного ветра',1,3);
+insert into books (id, `title`,fk_genres,fk_authors) values (2, 'Время черных звезд',1,3);
+insert into books (id, `title`,fk_genres,fk_authors) values (3, 'Ночной дозор',2,2);
+insert into books (id, `title`,fk_genres,fk_authors) values (4, 'Пушкин. Сборник стихов',3,1);
