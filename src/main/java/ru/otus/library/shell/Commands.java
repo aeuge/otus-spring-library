@@ -18,18 +18,16 @@ import java.util.Locale;
 public class Commands {
     public static Locale LOCAL;
 
-    @Autowired
-    GenreService genreService;
+    private GenreService genreService;
+    private AuthorService authorService;
+    private BookService bookService;
 
-    @Autowired
-    AuthorService authorService;
-
-    @Autowired
-    BookService bookService;
-
-    public Commands(MessageSource messageSource,YamlProps props) {
+    public Commands(MessageSource messageSource,YamlProps props,BookService bookService,AuthorService authorService,GenreService genreService) {
         LOCAL = Locale.forLanguageTag(props.getLocaleset());
-        System.out.println(messageSource.getMessage( "enter.name",new String[]{},LOCAL));
+        System.out.println(messageSource.getMessage( "list.commands",new String[]{},LOCAL));
+        this.genreService = genreService;
+        this.authorService = authorService;
+        this.bookService = bookService;
     }
 
     @ShellMethod("Список жанров")

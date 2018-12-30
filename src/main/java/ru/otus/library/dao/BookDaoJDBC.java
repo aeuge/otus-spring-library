@@ -18,10 +18,10 @@ public class BookDaoJDBC implements BookDao {
     private final JdbcOperations jdbc;
 
     @Autowired
-    private GenreService genreService;
+    private GenreDao genreDao;
 
     @Autowired
-    private AuthorService authorService;
+    private AuthorDao authorDao;
 
     public BookDaoJDBC(JdbcOperations jdbcOperations) {
         jdbc = jdbcOperations;
@@ -60,9 +60,9 @@ public class BookDaoJDBC implements BookDao {
             int id = resultSet.getInt("id");
             String title = resultSet.getString("title");
             int fk_author = resultSet.getInt("fk_authors");
-            Author author = authorService.getByID(fk_author);
+            Author author = authorDao.findByID(fk_author);
             int fk_genre = resultSet.getInt("fk_genres");
-            Genre genre = genreService.getByID(fk_genre);
+            Genre genre = genreDao.findByID(fk_genre);
             return new Book(id, title,author,genre);
         }
     }

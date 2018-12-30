@@ -1,8 +1,8 @@
 package ru.otus.library.domain;
 
 public class Genre {
-    int id=0;
-    String genre;
+    private int id=0;
+    private String genre;
 
     public Genre(String genre) {
         this.genre = genre;

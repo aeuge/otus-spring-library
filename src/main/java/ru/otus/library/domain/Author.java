@@ -1,8 +1,8 @@
 package ru.otus.library.domain;
 
 public class Author {
-    int id=0;
-    String fio;
+    private int id=0;
+    private String fio;
 
     public Author(String fio) {
         this.fio = fio;
