@@ -1,23 +1,23 @@
 package ru.otus.library.domain;
 
 public class Genre {
-    private int id=0;
+    private long id=0;
     private String genre;
 
     public Genre(String genre) {
         this.genre = genre;
     }
 
-    public Genre(int id, String genre) {
+    public Genre(long id, String genre) {
         this.id = id;
         this.genre = genre;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

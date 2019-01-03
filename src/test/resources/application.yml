@@ -1,9 +1,6 @@
-exam:
+library:
   bundlebase: /i18n/bundle
   localeset: ru-RU
-  numberOfQuestions: 1
-  filename: quest.csv
-  defaultAge: 28
 spring:
   banner:
     location: banner_test.txt

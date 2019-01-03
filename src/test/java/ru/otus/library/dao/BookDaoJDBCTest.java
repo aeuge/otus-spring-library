@@ -5,12 +5,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.context.annotation.Import;
 import ru.otus.library.config.YamlProps;
-import ru.otus.library.domain.Author;
 import ru.otus.library.domain.Book;
 
-@SpringBootTest
+@JdbcTest
+@Import({BookDaoJDBC.class,GenreDaoJDBC.class,AuthorDaoJDBC.class})
 @EnableConfigurationProperties(YamlProps.class)
 @DisplayName("Поиск книг через JDBC")
 class BookDaoJDBCTest {

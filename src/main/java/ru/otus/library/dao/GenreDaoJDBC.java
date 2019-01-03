@@ -2,6 +2,11 @@ package ru.otus.library.dao;
 
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 import ru.otus.library.domain.Genre;
 import java.sql.ResultSet;
@@ -28,14 +33,12 @@ public class GenreDaoJDBC implements GenreDao {
     }
 
     @Override
-    public int nextID() {
-        return jdbc.queryForObject("select max(id) from genres", Integer.class) + 1;
-    }
-
-    @Override
     public void insert(Genre genre) {
-        if (genre.getId()==0) { genre.setId(nextID()); }
-        jdbc.update("insert into genres (id, `genre`) values (?, ?)", genre.getId(), genre.getGenre());
+        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbc);
+        SqlParameterSource namedParameters = new MapSqlParameterSource("genre", genre.getGenre());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        namedParameterJdbcTemplate.update("insert into genres (genre) values (:genre)", namedParameters,keyHolder);
+        genre.setId(keyHolder.getKey().longValue());
     }
 
     @Override

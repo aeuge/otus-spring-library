@@ -12,9 +12,7 @@ import ru.otus.library.config.YamlProps;
 @EnableConfigurationProperties(YamlProps.class)
 public class Main {
 
-    public static void main(String[] args) {
-        SpringApplication.run(Main.class, args);
-    }
+    public static void main(String[] args) throws Exception{ SpringApplication.run(Main.class, args); }
 
     @Bean
     public PromptProvider myPromptProvider() {

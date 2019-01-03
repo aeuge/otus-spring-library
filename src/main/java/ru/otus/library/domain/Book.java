@@ -1,7 +1,7 @@
 package ru.otus.library.domain;
 
 public class Book {
-    private int id=0;
+    private long id=0;
     private String title;
     private Author author;
     private Genre genre;
@@ -16,7 +16,7 @@ public class Book {
         this.title = title;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -31,7 +31,7 @@ public class Book {
     public Genre getGenre() {
         return genre;
     }
-    public int setId(int id) {
+    public long setId(long id) {
         return this.id=id;
     }
 
@@ -47,7 +47,7 @@ public class Book {
         this.genre = genre;
     }
 
-    public Book(int id, String title, Author author, Genre genre) {
+    public Book(long id, String title, Author author, Genre genre) {
         this.id = id;
         this.title = title;
         this.author = author;

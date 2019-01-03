@@ -5,7 +5,6 @@ import java.util.List;
 
 public interface AuthorDao {
     int count();
-    int nextID();
     void insert(Author author);
     List<Author> getAll();
     Author findByFIO(String fio);

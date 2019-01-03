@@ -2,6 +2,11 @@ package ru.otus.library.dao;
 
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 import ru.otus.library.domain.Author;
 import java.sql.ResultSet;
@@ -28,14 +33,12 @@ public class AuthorDaoJDBC implements AuthorDao {
     }
 
     @Override
-    public int nextID() {
-        return jdbc.queryForObject("select max(id) from authors", Integer.class) + 1;
-    }
-
-    @Override
     public void insert(Author author) {
-        if (author.getId()==0) { author.setId(nextID()); }
-        jdbc.update("insert into authors (id, `fio`) values (?, ?)", author.getId(), author.getFio());
+        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbc);
+        SqlParameterSource namedParameters = new MapSqlParameterSource("fio", author.getFio());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        namedParameterJdbcTemplate.update("insert into authors (fio) values (:fio)", namedParameters,keyHolder);
+        author.setId(keyHolder.getKey().longValue());
     }
 
     @Override

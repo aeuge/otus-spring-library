@@ -6,7 +6,6 @@ import java.util.List;
 
 public interface GenreDao {
     int count();
-    int nextID();
     void insert(Genre genre);
     List<Genre> getAll();
     Genre findByGenre(String genre);
