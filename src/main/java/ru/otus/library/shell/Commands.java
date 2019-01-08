@@ -59,8 +59,8 @@ public class Commands {
     }
 
     @ShellMethod("Добавить книгу")
-    public String addBook(@ShellOption String title, String author, String genre) {
-        bookService.saveBook(new Book(title, authorService.getByID(Integer.parseInt(author)), genreService.getByID(Integer.parseInt(genre))));
+    public String addBook(@ShellOption String title, long author, long genre) {
+        bookService.saveBook(new Book(title, authorService.getByID(author), genreService.getByID(genre)));
         return bookService.getAll().toString();
     }
 

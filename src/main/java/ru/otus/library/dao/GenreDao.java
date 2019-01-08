@@ -9,5 +9,5 @@ public interface GenreDao {
     void insert(Genre genre);
     List<Genre> getAll();
     Genre findByGenre(String genre);
-    Genre findByID(int id);
+    Genre findByID(long id);
 }

@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface BookService {
     Book getByTitle(String title);
-    Book getByID(int id);
+    Book getByID(long id);
     void saveBook(Book book);
     List<Book> getAll();
 }

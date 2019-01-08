@@ -25,7 +25,7 @@ public class GenreDaoJDBC implements GenreDao {
     public Genre findByGenre(String genre) { return jdbc.queryForObject("select * from genres where genre = ?", new Object[] {genre}, new GenreMapper()); }
 
     @Override
-    public Genre findByID(int id) { return jdbc.queryForObject("select * from genres where id = ?", new Object[] {id}, new GenreMapper()); }
+    public Genre findByID(long id) { return jdbc.queryForObject("select * from genres where id = ?", new Object[] {id}, new GenreMapper()); }
 
     @Override
     public int count() {

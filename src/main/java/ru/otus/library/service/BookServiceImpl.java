@@ -20,7 +20,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book getByID(int id) {
+    public Book getByID(long id) {
         return dao.findByID(id);
     }
 

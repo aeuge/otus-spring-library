@@ -8,5 +8,5 @@ public interface BookDao {
     void insert(Book book);
     List<Book> getAll();
     Book findByTitle(String name);
-    Book findByID(int id);
+    Book findByID(long id);
 }

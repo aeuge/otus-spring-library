@@ -8,5 +8,5 @@ public interface AuthorDao {
     void insert(Author author);
     List<Author> getAll();
     Author findByFIO(String fio);
-    Author findByID(int id);
+    Author findByID(long id);
 }

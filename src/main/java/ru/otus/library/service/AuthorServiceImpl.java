@@ -20,7 +20,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Author getByID(int id) {
+    public Author getByID(long id) {
         return dao.findByID(id);
     }
 

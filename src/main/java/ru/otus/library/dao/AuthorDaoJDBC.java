@@ -25,7 +25,7 @@ public class AuthorDaoJDBC implements AuthorDao {
     public Author findByFIO(String fio) { return jdbc.queryForObject("select * from authors where fio = ?", new Object[] {fio}, new AuthorMapper()); }
 
     @Override
-    public Author findByID(int id) { return jdbc.queryForObject("select * from authors where id = ?", new Object[] {id}, new AuthorMapper()); }
+    public Author findByID(long id) { return jdbc.queryForObject("select * from authors where id = ?", new Object[] {id}, new AuthorMapper()); }
 
     @Override
     public int count() {
