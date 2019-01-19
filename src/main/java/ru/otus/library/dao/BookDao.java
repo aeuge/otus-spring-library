@@ -4,7 +4,7 @@ import ru.otus.library.domain.Book;
 import java.util.List;
 
 public interface BookDao {
-    int count();
+    long count();
     void insert(Book book);
     List<Book> getAll();
     Book findByTitle(String name);

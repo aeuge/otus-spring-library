@@ -1,16 +1,16 @@
 package ru.otus.library.service;
 
 import org.springframework.stereotype.Service;
-import ru.otus.library.dao.AuthorDaoJDBC;
+import ru.otus.library.dao.AuthorDaoJPA;
 import ru.otus.library.domain.Author;
 import java.util.List;
 
 @Service
 public class AuthorServiceImpl implements AuthorService {
 
-    private AuthorDaoJDBC dao;
+    private AuthorDaoJPA dao;
 
-    public AuthorServiceImpl(AuthorDaoJDBC dao) {
+    public AuthorServiceImpl(AuthorDaoJPA dao) {
         this.dao = dao;
     }
 
@@ -27,7 +27,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public void saveAuthor(Author author) { dao.insert(author); }
 
-    public void setDao(AuthorDaoJDBC dao) {
+    public void setDao(AuthorDaoJPA dao) {
         this.dao = dao;
     }
 

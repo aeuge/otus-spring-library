@@ -1,8 +1,17 @@
 package ru.otus.library.domain;
 
+import javax.persistence.*;
+
+@Entity
 public class Author {
-    private long id=0;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "AUTHOR_SEQ")
+    @SequenceGenerator(name = "AUTHOR_SEQ", sequenceName = "SEQUENCE_AUTHOR", initialValue = 100)
+    private long id;
+    @Column
     private String fio;
+
+    public Author(){}
 
     public Author(String fio) {
         this.fio = fio;

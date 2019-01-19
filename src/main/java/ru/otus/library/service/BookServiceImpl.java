@@ -1,16 +1,17 @@
 package ru.otus.library.service;
 
 import org.springframework.stereotype.Service;
-import ru.otus.library.dao.BookDaoJDBC;
+import org.springframework.transaction.annotation.Transactional;
+import ru.otus.library.dao.BookDaoJPA;
 import ru.otus.library.domain.Book;
 import java.util.List;
 
 @Service
 public class BookServiceImpl implements BookService {
 
-    private BookDaoJDBC dao;
+    private BookDaoJPA dao;
 
-    public BookServiceImpl(BookDaoJDBC dao) {
+    public BookServiceImpl(BookDaoJPA dao) {
         this.dao = dao;
     }
 
@@ -27,7 +28,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public void saveBook(Book book) { dao.insert(book); }
 
-    public void setDao(BookDaoJDBC dao) {
+    public void setDao(BookDaoJPA dao) {
         this.dao = dao;
     }
 

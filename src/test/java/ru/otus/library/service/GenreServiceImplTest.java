@@ -17,7 +17,7 @@ class GenreServiceImplTest {
     @DisplayName("успешно пройдено с известным ID")
     void getByName() {
         try {
-            Genre genre = new Genre(10,"Комедия");
+            Genre genre = new Genre(10, "Комедия");
             genreService.saveGenre(genre);
             Assertions.assertEquals(genreService.getByGenre(genre.getGenre()).getGenre(),genre.getGenre());
         } catch (Exception e) {
