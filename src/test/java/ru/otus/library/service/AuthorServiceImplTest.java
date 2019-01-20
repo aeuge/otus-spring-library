@@ -17,7 +17,7 @@ class AuthorServiceImplTest {
     @DisplayName("успешно пройдено с известным ID")
     void getByFIO() {
         try {
-            Author author = new Author(10,"Лермонтов Михаил Юрьевич");
+            Author author = new Author(1,"Лермонтов Михаил Юрьевич");
             authorService.saveAuthor(author);
             Assertions.assertEquals(authorService.getByFIO(author.getFio()).getFio(),author.getFio());
         } catch (Exception e) {

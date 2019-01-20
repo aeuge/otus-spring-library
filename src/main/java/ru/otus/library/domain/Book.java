@@ -1,10 +1,26 @@
 package ru.otus.library.domain;
 
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
 public class Book {
-    private long id=0;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BOOK_SEQ")
+    @SequenceGenerator(name = "BOOK_SEQ", sequenceName = "SEQUENCE_BOOK", initialValue = 100)
+    private long id;
+
+    @Column
     private String title;
+    @OneToOne
     private Author author;
+    @OneToOne
     private Genre genre;
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "book", cascade = CascadeType.ALL)
+    private List<Comment> comment = new ArrayList<>();
+
+    public Book () {}
 
     public Book(String title, Author author, Genre genre) {
         this.title = title;
@@ -47,6 +63,10 @@ public class Book {
         this.genre = genre;
     }
 
+    public void addComment(Comment comment) {
+        this.comment.add(comment);
+    }
+
     public Book(long id, String title, Author author, Genre genre) {
         this.id = id;
         this.title = title;
@@ -61,6 +81,7 @@ public class Book {
                 ", title='" + title + '\'' +
                 ", author=" + author.getFio() +
                 ", genre=" + genre.getGenre() +
+                ", comments=" + comment +
                 '}';
     }
 }

@@ -1,8 +1,20 @@
 package ru.otus.library.domain;
 
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+import java.util.UUID;
+
+@Entity
 public class Genre {
-    private long id=0;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "GENRE_SEQ")
+    @SequenceGenerator(name = "GENRE_SEQ", sequenceName = "SEQUENCE_GENRE", initialValue = 100)
+    private long id;
+    @Column
     private String genre;
+
+    public Genre() {}
 
     public Genre(String genre) {
         this.genre = genre;
