@@ -4,8 +4,8 @@ import ru.otus.library.domain.Author;
 import java.util.List;
 
 public interface AuthorService {
-    Author getByFIO(String fio);
-    Author getByID(long id);
+    Author getByFio(String fio);
+    Author getById(long id);
     void saveAuthor(Author author);
     List<Author> getAll();
 }

@@ -1,36 +1,33 @@
 package ru.otus.library.service;
 
 import org.springframework.stereotype.Service;
-import ru.otus.library.dao.AuthorDaoJPA;
 import ru.otus.library.domain.Author;
+import ru.otus.library.repository.AuthorRepository;
+
 import java.util.List;
 
 @Service
 public class AuthorServiceImpl implements AuthorService {
 
-    private AuthorDaoJPA dao;
+    private AuthorRepository dao;
 
-    public AuthorServiceImpl(AuthorDaoJPA dao) {
+    public AuthorServiceImpl(AuthorRepository dao) {
         this.dao = dao;
     }
 
     @Override
-    public Author getByFIO(String fio) {
-        return dao.findByFIO(fio);
-    }
+    public Author getByFio(String fio) { return dao.findByfioContaining(fio); }
 
     @Override
-    public Author getByID(long id) {
-        return dao.findByID(id);
-    }
+    public Author getById(long id) { return dao.findById(id).get(); }
 
     @Override
-    public void saveAuthor(Author author) { dao.insert(author); }
+    public void saveAuthor(Author author) { dao.save(author); }
 
-    public void setDao(AuthorDaoJPA dao) {
+    public void setDao(AuthorRepository dao) {
         this.dao = dao;
     }
 
     @Override
-    public List<Author> getAll() { return dao.getAll(); }
+    public List<Author> getAll() { return dao.findAll(); }
 }

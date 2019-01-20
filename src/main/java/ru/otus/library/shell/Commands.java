@@ -49,6 +49,18 @@ public class Commands {
         return bookService.getAll().toString();
     }
 
+    @ShellMethod("Поиск комментариев")
+    public String findComment(@ShellOption String comment) { return commentService.getByComment(comment).toString(); }
+
+    @ShellMethod("Поиск книг")
+    public String findBook(@ShellOption String title) { return bookService.getByTitle(title).toString(); }
+
+    @ShellMethod("Поиск авторов")
+    public String findAuthor(@ShellOption String fio) { return authorService.getByFio(fio).toString(); }
+
+    @ShellMethod("Поиск жанров")
+    public String findGenre(@ShellOption String genre) { return genreService.getByGenre(genre).toString(); }
+
     @ShellMethod("Список комментариев")
     public String listComment() {
         return commentService.getAll().toString();
@@ -68,12 +80,12 @@ public class Commands {
 
     @ShellMethod("Добавить книгу")
     public String addBook(@ShellOption String title, long author, long genre) {
-        bookService.saveBook(new Book(title, authorService.getByID(author), genreService.getByID(genre)));
+        bookService.saveBook(new Book(title, authorService.getById(author), genreService.getById(genre)));
         return bookService.getAll().toString();
     }
     @ShellMethod("Добавить комментарий")
     public String addComment(@ShellOption String comment, long book) {
-        Book book_to_update = bookService.getByID(book);
+        Book book_to_update = bookService.getById(book);
         book_to_update.addComment(new Comment(comment, book_to_update));
         commentService.saveComment(book_to_update);
         return bookService.getAll().toString();
