@@ -5,8 +5,8 @@ import ru.otus.library.domain.Book;
 import java.util.List;
 
 public interface BookService {
-    Book getByTitle(String title);
-    Book getByID(long id);
+    List<Book> getByTitle(String title);
+    Book getById(long id);
     void saveBook(Book book);
     List<Book> getAll();
 }
