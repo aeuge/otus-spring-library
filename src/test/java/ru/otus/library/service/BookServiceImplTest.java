@@ -24,27 +24,26 @@ class BookServiceImplTest {
 
     @Test
     @Transactional
-    @DisplayName("успешно пройдено с известным ID")
+    @DisplayName("должна быть добавлена запись с известным ID и прочитана")
     void getByFIO() {
-        try {
-            Book book = new Book(1,"Конституция",authorService.getById(30), genreService.getById(30));
-            bookService.saveBook(book);
-            Assertions.assertEquals(bookService.getByTitle(book.getTitle()).getTitle(),book.getTitle());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Book book = new Book(1,"Конституция",authorService.getById(30), genreService.getById(30));
+        bookService.saveBook(book);
+        Assertions.assertEquals(bookService.getByTitle(book.getTitle()).get(0).getTitle(),book.getTitle());
     }
 
     @Test
     @Transactional
-    @DisplayName("успешно пройдено без ID")
+    @DisplayName("должна быть добавлена запись без ID и успешно прочитана")
     void getByFIONew() {
-        try {
-            Book book = new Book("Конституция",authorService.getById(30), genreService.getById(30));
-            bookService.saveBook(book);
-            Assertions.assertEquals(bookService.getByTitle(book.getTitle()).getTitle(),book.getTitle());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Book book = new Book("Конституция",authorService.getById(30), genreService.getById(30));
+        bookService.saveBook(book);
+        Assertions.assertEquals(bookService.getByTitle(book.getTitle()).get(0).getTitle(),book.getTitle());
+    }
+
+    @Test
+    @DisplayName("должно вернуть книгу по части названия")
+    @Transactional
+    void getByTitlePart() {
+        Assertions.assertEquals(bookService.getByTitle("еребр").get(0).getTitle(), "Отзвуки серебряного ветра");
     }
 }

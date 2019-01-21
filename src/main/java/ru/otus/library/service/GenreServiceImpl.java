@@ -16,9 +16,7 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public Genre getByGenre(String genre) {
-        return dao.findBygenreContaining(genre);
-    }
+    public List<Genre> getByGenre(String genre) { return dao.findBygenreContaining(genre); }
 
     @Override
     public Genre getById(long id) {

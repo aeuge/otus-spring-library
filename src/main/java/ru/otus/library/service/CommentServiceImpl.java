@@ -20,7 +20,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment getByComment(String text) {
+    public List<Comment> getByComment(String text) {
         return dao.findBytextContainingIgnoreCase(text);
     }
 

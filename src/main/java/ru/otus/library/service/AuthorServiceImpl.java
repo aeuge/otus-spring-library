@@ -16,7 +16,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Author getByFio(String fio) { return dao.findByfioContaining(fio); }
+    public List<Author> getByFio(String fio) { return dao.findByfioContaining(fio); }
 
     @Override
     public Author getById(long id) { return dao.findById(id).get(); }

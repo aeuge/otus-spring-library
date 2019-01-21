@@ -8,7 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface CommentRepository extends CrudRepository<Comment, Long> {
-    Comment findBytextContainingIgnoreCase(String text);
+    List<Comment> findBytextContainingIgnoreCase(String text);
     List<Comment> findAll();
     Optional<Comment> findById(Long id);
 }

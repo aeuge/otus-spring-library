@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.library.domain.Genre;
 
 @DataJpaTest
@@ -16,26 +17,27 @@ class GenreServiceImplTest {
     GenreService genreService;
 
     @Test
-    @DisplayName("успешно пройдено с известным ID")
+    @Transactional
+    @DisplayName("должна быть добавлена запись с известным ID и прочитана")
     void getByName() {
-        try {
-            Genre genre = new Genre(10, "Комедия");
-            genreService.saveGenre(genre);
-            Assertions.assertEquals(genreService.getByGenre(genre.getGenre()).getGenre(),genre.getGenre());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Genre genre = new Genre(10, "Комедия");
+        genreService.saveGenre(genre);
+        Assertions.assertEquals(genreService.getByGenre(genre.getGenre()).get(0).getGenre(),genre.getGenre());
     }
 
     @Test
-    @DisplayName("успешно пройдено без ID")
+    @Transactional
+    @DisplayName("должна быть добавлена запись без ID и прочитана")
     void getByNameNew() {
-        try {
-            Genre genre = new Genre("Комедия");
-            genreService.saveGenre(genre);
-            Assertions.assertEquals(genreService.getByGenre(genre.getGenre()).getGenre(),genre.getGenre());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Genre genre = new Genre("Комедия");
+        genreService.saveGenre(genre);
+        Assertions.assertEquals(genreService.getByGenre(genre.getGenre()).get(0).getGenre(),genre.getGenre());
+    }
+
+    @Test
+    @DisplayName("должно вернуть комментарий по части комментария")
+    @Transactional
+    void getByGenrePart() {
+        Assertions.assertEquals(genreService.getByGenre("антаст").get(0).getGenre(), "Фантастика");
     }
 }

@@ -17,28 +17,27 @@ class AuthorServiceImplTest {
     AuthorService authorService;
 
     @Test
-    @DisplayName("успешно пройдено с известным ID")
+    @DisplayName("должна быть добавлена запись с известным ID и прочитана")
     @Transactional
     void getByFIO() {
-        try {
-            Author author = new Author(1,"Лермонтов Михаил Юрьевич");
-            authorService.saveAuthor(author);
-            Assertions.assertEquals(authorService.getByFio(author.getFio()).getFio(),author.getFio());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Author author = new Author(1,"Лермонтов Михаил Юрьевич");
+        authorService.saveAuthor(author);
+        Assertions.assertEquals(authorService.getByFio(author.getFio()).get(0).getFio(),author.getFio());
     }
 
     @Test
-    @DisplayName("успешно пройдено без ID")
+    @DisplayName("должна быть добавлена запись без ID и прочитана")
     @Transactional
     void getByFIONew() {
-        try {
-            Author author = new Author("Лермонтов Михаил Юрьевич");
-            authorService.saveAuthor(author);
-            Assertions.assertEquals(authorService.getByFio(author.getFio()).getFio(),author.getFio());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Author author = new Author("Лермонтов Михаил Юрьевич");
+        authorService.saveAuthor(author);
+        Assertions.assertEquals(authorService.getByFio(author.getFio()).get(0).getFio(),author.getFio());
+    }
+
+    @Test
+    @DisplayName("должно вернуть автора по части ФИО")
+    @Transactional
+    void getByFIOPart() {
+        Assertions.assertEquals(authorService.getByFio("Сер").get(0).getFio(), "Пушкин Александр Сергеевич");
     }
 }
