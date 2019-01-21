@@ -8,7 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface GenreRepository extends CrudRepository<Genre, Long> {
-    List<Genre> findBygenreContaining(String genre);
+    List<Genre> findByGenreContaining(String genre);
     List<Genre> findAll();
     Optional<Genre> findById(Long id);
 }

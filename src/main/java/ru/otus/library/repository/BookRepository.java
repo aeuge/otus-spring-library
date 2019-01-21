@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface BookRepository extends CrudRepository<Book, Long> {
-    List<Book> findBytitleContaining(String title);
+    List<Book> findByTitleContaining(String title);
     List<Book> findAll();
     Optional<Book> findById(Long id);
 }

@@ -21,7 +21,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<Comment> getByComment(String text) {
-        return dao.findBytextContainingIgnoreCase(text);
+        return dao.findByTextContainingIgnoreCase(text);
     }
 
     @Override
