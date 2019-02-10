@@ -5,10 +5,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.*;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.shell.jline.PromptProvider;
 import ru.otus.library.config.YamlProps;
 
 @SpringBootApplication
+@EnableMongoRepositories
 @EnableConfigurationProperties(YamlProps.class)
 public class Main {
 

@@ -4,3 +4,7 @@ library:
 spring:
     banner:
       location: banner.txt
+    data.mongodb:
+      host: localhost
+      port: 27017
+      database: library

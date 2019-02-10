@@ -1,87 +1,39 @@
 package ru.otus.library.domain;
 
-import javax.persistence.*;
+import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+@Data
+@Document("books")
 public class Book {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BOOK_SEQ")
-    @SequenceGenerator(name = "BOOK_SEQ", sequenceName = "SEQUENCE_BOOK", initialValue = 100)
-    private long id;
-
-    @Column
+    private String id;
     private String title;
-    @OneToOne
-    private Author author;
-    @OneToOne
-    private Genre genre;
-    @OneToMany(fetch = FetchType.EAGER,mappedBy = "book", cascade = CascadeType.ALL)
-    private List<Comment> comment = new ArrayList<>();
+    private List<String> author = new ArrayList<>();
+    private List<String> genre = new ArrayList<>();
+    private List<String> comment = new ArrayList<>();
 
     public Book () {}
 
-    public Book(String title, Author author, Genre genre) {
+    public Book(String title, String author, String genre) {
         this.title = title;
-        this.author = author;
-        this.genre = genre;
+        this.author.add(author);
+        this.genre.add(genre);
     }
 
     public Book(String title) {
         this.title = title;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public Author getAuthor() {
-        return author;
-    }
-
-    public Genre getGenre() {
-        return genre;
-    }
-    public long setId(long id) {
-        return this.id=id;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setAuthor(Author author) {
-        this.author = author;
-    }
-
-    public void setGenre(Genre genre) {
-        this.genre = genre;
-    }
-
-    public void addComment(Comment comment) {
+    public void addComment(String comment) {
         this.comment.add(comment);
     }
 
-    public Book(long id, String title, Author author, Genre genre) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.genre = genre;
-    }
+    public void addGenre(String genre) { this.genre.add(genre); }
 
-    @Override
-    public String toString() {
-        return "Book{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", author=" + author.getFio() +
-                ", genre=" + genre.getGenre() +
-                ", comments=" + comment +
-                '}';
-    }
+    public void addAuthor(String author) { this.author.add(author); }
+
 }
