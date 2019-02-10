@@ -13,19 +13,19 @@ import ru.otus.library.domain.Book;
 @Import({BookRepository.class})
 @DisplayName("Тестирование монго репозитория книг")
 class BookRepository {
-    @Autowired
     private BookRepository bookRepository;
 
     @BeforeEach
-    void before() {
+    void before(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
         Book book = new Book("Отзвуки серебряного ветра","Эльтеррус Иар", "Фантастика");
-        bookRepository.save(book);
+        //bookRepository.save(book);
     }
 
     @Test
     @DisplayName("должно вернуть книгу по части названия")
     void getByTitlePart() {
-        Assertions.assertEquals(bookRepository.getByTitle("еребр").get(0).getTitle(), "Отзвуки серебряного ветра");
+        Assertions.assertEquals(bookRepository.ggetByTitle("еребр").get(0).getTitle(), "Отзвуки серебряного ветра");
     }
 
     @Test
