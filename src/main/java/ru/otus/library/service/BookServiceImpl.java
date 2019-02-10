@@ -1,26 +1,26 @@
 package ru.otus.library.service;
 
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
-import ru.otus.library.domain.Author;
 import ru.otus.library.domain.Book;
-import ru.otus.library.domain.Comment;
-import ru.otus.library.domain.Genre;
 import ru.otus.library.repository.BookRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class BookServiceImpl implements BookService {
-
     private BookRepository dao;
-    MongoTemplate mongoTemplate;
 
-    public BookServiceImpl(BookRepository dao, MongoTemplate mongoTemplate) {
-        this.dao = dao;
-        this.mongoTemplate = mongoTemplate;
+    public BookServiceImpl(BookRepository dao) { this.dao = dao; }
+
+    @Override
+    public Book getByTitleExact(String title) {
+        return dao.findByTitle(title);
+    }
+
+    @Override
+    public Book getByAuthorExact(String author) {
+        return dao.findByAuthor(author);
     }
 
     @Override
@@ -50,26 +50,17 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<String> getAllGenre() {
-        List<Genre> listAuthor = dao.findAllGenre();
-        List<String> newListGenre = new ArrayList<>();
-        listAuthor.forEach((l)->{l.getGenre().forEach(newListGenre::add);});
-        return newListGenre.stream().distinct().collect(Collectors.toList());
+        return dao.findAllGenre().stream().flatMap(genre -> genre.getGenre().stream()).distinct().collect(Collectors.toList());
     }
 
     @Override
     public List<String> getAllAuthor() {
-        List<Author> listAuthor = dao.findAllAuthor();
-        List<String> newListAuthor = new ArrayList<>();
-        listAuthor.forEach((l)->{l.getAuthor().forEach(newListAuthor::add);});
-        return newListAuthor.stream().distinct().collect(Collectors.toList());
+        return dao.findAllAuthor().stream().flatMap(author -> author.getAuthor().stream()).distinct().collect(Collectors.toList());
     }
 
     @Override
     public List<String> getAllComment() {
-        List<Comment> listComment = dao.findAllComment();
-        List<String> newListComment = new ArrayList<>();
-        listComment.forEach((l)->{l.getComment().forEach(newListComment::add);});
-        return newListComment.stream().distinct().collect(Collectors.toList());
+        return dao.findAllComment().stream().flatMap(comment -> comment.getComment().stream()).distinct().collect(Collectors.toList());
     }
 
 }

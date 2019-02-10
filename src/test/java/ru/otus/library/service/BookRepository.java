@@ -10,22 +10,22 @@ import org.springframework.context.annotation.Import;
 import ru.otus.library.domain.Book;
 
 @DataMongoTest
-@Import({BookServiceImpl.class})
-@DisplayName("Тестирование DAO книг")
-class BookServiceImplTest {
+@Import({BookRepository.class})
+@DisplayName("Тестирование монго репозитория книг")
+class BookRepository {
     @Autowired
-    BookService bookService;
+    private BookRepository bookRepository;
 
     @BeforeEach
     void before() {
         Book book = new Book("Отзвуки серебряного ветра","Эльтеррус Иар", "Фантастика");
-        bookService.saveBook(book);
+        bookRepository.save(book);
     }
 
     @Test
     @DisplayName("должно вернуть книгу по части названия")
     void getByTitlePart() {
-        Assertions.assertEquals(bookService.getByTitle("еребр").get(0).getTitle(), "Отзвуки серебряного ветра");
+        Assertions.assertEquals(bookRepository.getByTitle("еребр").get(0).getTitle(), "Отзвуки серебряного ветра");
     }
 
     @Test

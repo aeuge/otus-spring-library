@@ -18,4 +18,6 @@ public interface BookService {
     List<String> getAllGenre();
     List<String> getAllAuthor();
     List<String> getAllComment();
+    Book getByTitleExact(String title);
+    Book getByAuthorExact(String author);
 }

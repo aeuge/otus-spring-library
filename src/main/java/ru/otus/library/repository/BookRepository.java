@@ -25,4 +25,6 @@ public interface BookRepository extends CrudRepository<Book, Long> {
     @Query("{},{comment:1}")
     List<Comment> findAllComment();
     Optional<Book> findById(Long id);
+    Book findByTitle(String title);
+    Book findByAuthor(String author);
 }

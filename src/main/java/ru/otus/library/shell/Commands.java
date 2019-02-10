@@ -10,6 +10,8 @@ import ru.otus.library.service.BookService;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 @ShellComponent
 public class Commands {
@@ -63,23 +65,25 @@ public class Commands {
 
     @ShellMethod("Добавить комментарий для книги")
     public String addComment(@ShellOption String book, String comment) {
-        List<Book> book_to_update = bookService.getByTitle(book);
-        book_to_update.forEach((b)->{b.addComment(comment); bookService.saveBook(b);});
-        return bookService.getAll().toString();
+        return add(book,  bookForUpdate -> bookForUpdate.addComment(comment));
     }
 
     @ShellMethod("Добавить автора для книги")
     public String addAuthor(@ShellOption String book, String author) {
-        List<Book> book_to_update = bookService.getByTitle(book);
-        book_to_update.forEach((b)->{b.addAuthor(author); bookService.saveBook(b);});
-        return bookService.getAll().toString();
+        return add(book,  bookForUpdate -> bookForUpdate.addAuthor(author));
     }
 
     @ShellMethod("Добавить жанр для книги")
     public String addGenre(@ShellOption String book, String genre) {
-        List<Book> book_to_update = bookService.getByTitle(book);
-        book_to_update.forEach((b)->{b.addAuthor(genre); bookService.saveBook(b);});
-        return bookService.getAll().toString();
+        return add(book, bookForUpdate -> bookForUpdate.addGenre(genre));
+    }
+
+    private String add(String book, Consumer<Book> consumer) {
+        Book bookForUpdate = bookService.getByTitleExact(book);
+        if (bookForUpdate == null) return "книга с таким названием не найдена";
+        consumer.accept(bookForUpdate);
+        bookService.saveBook(bookForUpdate);
+        return bookForUpdate.toString();
     }
 
 }
