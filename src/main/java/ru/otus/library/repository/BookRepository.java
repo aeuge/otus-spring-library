@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface BookRepository extends CrudRepository<Book, Long> {
+public interface BookRepository extends CrudRepository<Book, String> {
     List<Book> findByTitleContaining(String title);
     List<Book> findByCommentRegex(String comment);
     List<Book> findByAuthorRegex(String author);
@@ -24,7 +24,7 @@ public interface BookRepository extends CrudRepository<Book, Long> {
     List<Author> findAllAuthor();
     @Query("{},{comment:1}")
     List<Comment> findAllComment();
-    Optional<Book> findById(Long id);
+    Optional<Book> findById(String id);
     Book findByTitle(String title);
     Book findByAuthor(String author);
 }

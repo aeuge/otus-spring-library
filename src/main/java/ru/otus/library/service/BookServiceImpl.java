@@ -38,7 +38,7 @@ public class BookServiceImpl implements BookService {
     public List<Book> getByGenre(String genre) { return dao.findByGenreRegex(".*" + genre + ".*"); }
 
     @Override
-    public Book getById(long id) {
+    public Book getById(String id) {
         return dao.findById(id).get();
     }
 

@@ -1,23 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <title>List of all persons</title>
-    <style type="text/css">
-        body {
-            padding: 50px;
-        }
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <script type="text/javascript" src="css/jquery-3.js"></script>
+    <link href="css/auth.css" rel="stylesheet">
+    <title>Информация о книгах</title></head>
+<body><div class="TitleTop">Информация о книгах</div>
 
-        .books, .books td {
-            border: 1px solid lightgray;
-            padding: 5px;
-        }
-    </style>
-</head>
-<body>
-<h1>Books:</h1>
-
-<table class="books">
+<table class="text-white">
     <thead>
     <tr>
         <th>ID</th>
@@ -28,9 +18,12 @@
     <tbody>
     <tr th:each="book : ${books}">
         <td th:text="${book.id}">1</td>
-        <td th:text="${book.title}">John Doe</td>
+        <td th:text="${book.title}">Title</td>
+        <td th:text="${book.author}">Author</td>
+        <td th:text="${book.genre}">Genres</td>
+        <td th:text="${book.comment}">Comments</td>
         <td>
-            <a th:href="@{/edit(id=${book.id})}" href="edit.html">Edit</a>
+            <a th:href="@{/book(id=${book.id})}" href="book.html">Edit</a>
         </td>
     </tr>
     </tbody>

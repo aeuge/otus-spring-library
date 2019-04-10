@@ -28,17 +28,17 @@ public class AuthorController {
         return "list";
     }
 
-    @GetMapping("/edit")
-    public String editPage(@RequestParam("id") long id, Model model) {
+    @GetMapping("/book")
+    public String editPage(@RequestParam("id") String id, Model model) {
         Book book = repository.findById(id).orElseThrow(NotFoundException::new);
         model.addAttribute("book", book);
-        return "edit";
+        return "book";
     }
 
-    @PostMapping("/edit")
-    public String savePage(@RequestParam("id") long id,@RequestParam("name2") String name, Model model) {
+    @PostMapping("/book")
+    public String savePage(@RequestParam("id") String id, @RequestParam("title") String title, Model model) {
         Book book = repository.findById(id).orElseThrow(NotFoundException::new);
-        book.setTitle(name);
+        book.setTitle(title);
         repository.save(book);
         return listPage(model);
     }
