@@ -1,5 +1,5 @@
 library:
-  bundlebase: /i18n/bundle
+  bundlebase: /i18n/messages
   localeset: ru-RU
 spring:
     banner:
