@@ -15,35 +15,53 @@ import java.util.List;
 @Controller
 public class AuthorController {
 
-    private final BookRepository repository;
+    private final BookRepository bookRepository;
 
     @Autowired
-    public AuthorController(BookRepository repository) {
-        this.repository = repository;
+    public AuthorController(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
     }
 
     @GetMapping("/")
     public String listPage(Model model) {
-        List<Book> books = repository.findAll();
+        List<Book> books = bookRepository.findAll();
         model.addAttribute("books", books);
         return "list";
     }
 
     @GetMapping("/book")
     public String editPage(@RequestParam("id") String id, Model model) {
-        Book book = repository.findById(id).orElseThrow(NotFoundException::new);
+        Book book;
+        if (id.equals("new")) {
+            book = new Book();
+            book.setId("new");
+        } else {
+            book = bookRepository.findById(id).orElseThrow(NotFoundException::new);
+        }
         model.addAttribute("book", book);
         return "book";
     }
 
+    @GetMapping("/book/delete")
+    public String deletePage(@RequestParam("id") String id, Model model) {
+        Book book = bookRepository.findById(id).orElseThrow(NotFoundException::new);
+        bookRepository.delete(book);
+        return "redirect:/";
+    }
+
     @PostMapping("/book")
     public String savePage(@RequestParam("id") String id, @RequestParam("title") String title,  @RequestParam("author") String author, @RequestParam("genre") String genre, @RequestParam("comment") String comment,Model model) {
-        Book book = repository.findById(id).orElseThrow(NotFoundException::new);
+        Book book;
+        if (id.equals("new")) {
+            book = new Book();
+        } else {
+            book = bookRepository.findById(id).orElseThrow(NotFoundException::new);
+        }
         book.setTitle(title);
         book.setAuthor(Arrays.asList(author));
         book.setGenre(Arrays.asList(genre));
         book.setComment(Arrays.asList(comment));
-        repository.save(book);
+        bookRepository.save(book);
         model.addAttribute("book", book);
         return "book";
     }

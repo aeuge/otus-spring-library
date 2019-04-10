@@ -4,15 +4,18 @@
     <link href="css/bootstrap.css" rel="stylesheet">
     <script type="text/javascript" src="css/jquery-3.js"></script>
     <link href="css/auth.css" rel="stylesheet">
-    <title>Информация о книгах</title></head>
-<body><div class="TitleTop">Информация о книгах</div>
-<span th:text="#{localized.hello}">Hello!</span>
+    <title th:text="#{general.info}">Info</title></head>
+<body><div class="TitleTop" th:text="#{general.info}">Info</div>
 <table class="text-white">
     <thead>
     <tr>
-        <th>ID</th>
-        <th>Title</th>
-        <th>Action</th>
+        <td>ID</td>
+        <td th:text="#{general.title}">Title</td>
+        <td th:text="#{general.author}">Author</td>
+        <td th:text="#{general.genre}">Genre</td>
+        <td th:text="#{general.comment}">Comment</td>
+        <td th:text="#{general.edit}">Edit</td>
+        <td th:text="#{general.delete}">Delete</td>
     </tr>
     </thead>
     <tbody>
@@ -23,10 +26,19 @@
         <td th:text="${book.genre}">Genres</td>
         <td th:text="${book.comment}">Comments</td>
         <td>
-            <a th:href="@{/book(id=${book.id})}" href="book.html">Edit</a>
+            <a th:href="@{/book(id=${book.id})}" href="book.html" th:text="#{general.edit}">Edit</a>
+        </td>
+        <td>
+            <a th:href="@{/book/delete(id=${book.id})}" href="book.html" th:text="#{general.delete}">Delete</a>
         </td>
     </tr>
     </tbody>
 </table>
+<div class="text-white" style="width:200px">
+    <form method="get" action="/book">
+        <input name="id" readonly="readonly" value="new" type="hidden"/>
+        <button type="submit" class="btn btn-primary btn-block btn-large" th:text="#{general.new}">New book</button>
+    </form>
+</div>
 </body>
 </html>
