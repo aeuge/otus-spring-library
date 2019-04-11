@@ -28,12 +28,4 @@ public class Book {
         this.title = title;
     }
 
-    public void addComment(String comment) {
-        this.comment.add(comment);
-    }
-
-    public void addGenre(String genre) { this.genre.add(genre); }
-
-    public void addAuthor(String author) { this.author.add(author); }
-
 }

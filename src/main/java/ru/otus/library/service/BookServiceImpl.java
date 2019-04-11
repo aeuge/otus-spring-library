@@ -38,9 +38,7 @@ public class BookServiceImpl implements BookService {
     public List<Book> getByGenre(String genre) { return dao.findByGenreRegex(".*" + genre + ".*"); }
 
     @Override
-    public Book getById(long id) {
-        return dao.findById(id).get();
-    }
+    public Book getById(String id) { return dao.findById(id).get(); }
 
     @Override
     public void saveBook(Book book) { dao.save(book); }
@@ -49,18 +47,12 @@ public class BookServiceImpl implements BookService {
     public List<Book> getAll() { return dao.findAll(); }
 
     @Override
-    public List<String> getAllGenre() {
-        return dao.findAllGenre().stream().flatMap(genre -> genre.getGenre().stream()).distinct().collect(Collectors.toList());
-    }
+    public List<String> getAllGenre() { return dao.findAllGenre().stream().flatMap(genre -> genre.getGenre().stream()).distinct().collect(Collectors.toList()); }
 
     @Override
-    public List<String> getAllAuthor() {
-        return dao.findAllAuthor().stream().flatMap(author -> author.getAuthor().stream()).distinct().collect(Collectors.toList());
-    }
+    public List<String> getAllAuthor() { return dao.findAllAuthor().stream().flatMap(author -> author.getAuthor().stream()).distinct().collect(Collectors.toList()); }
 
     @Override
-    public List<String> getAllComment() {
-        return dao.findAllComment().stream().flatMap(comment -> comment.getComment().stream()).distinct().collect(Collectors.toList());
-    }
+    public List<String> getAllComment() { return dao.findAllComment().stream().flatMap(comment -> comment.getComment().stream()).distinct().collect(Collectors.toList()); }
 
 }

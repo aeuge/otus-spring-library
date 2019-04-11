@@ -12,7 +12,7 @@ public interface BookService {
     List<Book> getByComment(String comment);
     List<Book> getByAuthor(String author);
     List<Book> getByGenre(String genre);
-    Book getById(long id);
+    Book getById(String id);
     void saveBook(Book book);
     List<Book> getAll();
     List<String> getAllGenre();

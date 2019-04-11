@@ -1,6 +1,3 @@
-library:
-  bundlebase: /i18n/bundle
-  localeset: ru-RU
 spring:
     banner:
       location: banner.txt
