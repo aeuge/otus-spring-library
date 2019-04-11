@@ -13,12 +13,12 @@ import java.util.Arrays;
 import java.util.List;
 
 @Controller
-public class AuthorController {
+public class BookController {
 
     private final BookRepository bookRepository;
 
     @Autowired
-    public AuthorController(BookRepository bookRepository) {
+    public BookController(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
 
@@ -30,7 +30,7 @@ public class AuthorController {
     }
 
     @GetMapping("/book")
-    public String editPage(@RequestParam("id") String id, Model model) {
+    public String editBook(@RequestParam("id") String id, Model model) {
         Book book;
         if (id.equals("new")) {
             book = new Book();
@@ -42,15 +42,15 @@ public class AuthorController {
         return "book";
     }
 
-    @GetMapping("/book/delete")
-    public String deletePage(@RequestParam("id") String id, Model model) {
+    @PostMapping("/book/delete")
+    public String deleteBook(@RequestParam("id") String id, Model model) {
         Book book = bookRepository.findById(id).orElseThrow(NotFoundException::new);
         bookRepository.delete(book);
         return "redirect:/";
     }
 
     @PostMapping("/book")
-    public String savePage(@RequestParam("id") String id, @RequestParam("title") String title,  @RequestParam("author") String author, @RequestParam("genre") String genre, @RequestParam("comment") String comment,Model model) {
+    public String saveBook(@RequestParam("id") String id, @RequestParam("title") String title,  @RequestParam("author") String author, @RequestParam("genre") String genre, @RequestParam("comment") String comment,Model model) {
         Book book;
         if (id.equals("new")) {
             book = new Book();

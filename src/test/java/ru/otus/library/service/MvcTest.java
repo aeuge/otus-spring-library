@@ -11,7 +11,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.otus.library.domain.Book;
 import ru.otus.library.repository.BookRepository;
-import ru.otus.library.rest.AuthorController;
+import ru.otus.library.rest.BookController;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @AutoConfigureMockMvc(secure = false)
-@WebMvcTest(AuthorController.class)
+@WebMvcTest(BookController.class)
 @DisplayName("Тестирование контроллера mvc")
 public class MvcTest {
     @Autowired
