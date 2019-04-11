@@ -2779,6 +2779,7 @@ fieldset[disabled] a.btn {
 }
 
 .btn-link {
+  border: none;
   font-weight: 400;
   color: #007bff;
   background-color: transparent;
