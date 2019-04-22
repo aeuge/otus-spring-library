@@ -23,10 +23,8 @@ public class BookController {
     }
 
     @GetMapping("/")
-    public String listPage(Model model) {
-        List<Book> books = bookRepository.findAll();
-        model.addAttribute("books", books);
-        return "list";
+    public String listBook(Model model) {
+        return "index";
     }
 
     @GetMapping("/book")
@@ -40,13 +38,6 @@ public class BookController {
         }
         model.addAttribute("book", book);
         return "book";
-    }
-
-    @PostMapping("/book/delete")
-    public String deleteBook(@RequestParam("id") String id, Model model) {
-        Book book = bookRepository.findById(id).orElseThrow(NotFoundException::new);
-        bookRepository.delete(book);
-        return "redirect:/";
     }
 
     @PostMapping("/book")
