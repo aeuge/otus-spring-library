@@ -25,9 +25,9 @@ public class RestBookController {
                 .collect(Collectors.toList());
     }
 
-    @PostMapping("/book/delete")
-    public String deleteBook(@RequestBody String bookid, Model model) {
-        Book book = repository.findById(bookid).orElseThrow(NotFoundException::new);
+    @DeleteMapping("/book/{id}")
+    public String deleteBook(@PathVariable String id) {
+        Book book = repository.findById(id).orElseThrow(NotFoundException::new);
         repository.delete(book);
         return "ok";
     }

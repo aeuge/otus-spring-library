@@ -35,13 +35,10 @@
         </td>
         <td>
             <div id="app" name="app">
-                <form @submit.prevent="submitForm" method="post" name = "frm">
-                    <input id="bookid" name="bookid" readonly="readonly" :value="book.id"/>
-                    <button type="submit" value="value" class="btn-link" th:text="#{general.delete}">Delete</button>
+                    <button @click="deleteBook(book.id)" type="submit" value="value" class="btn-link" th:text="#{general.delete}">Delete</button>
                     <div>
                         <pre>{{ response }}</pre>
                     </div>
-                </form>
             </div>
         </td>
     </tr>
@@ -65,16 +62,21 @@
                     response:''
                 },
                 methods: {
-                    submitForm() {
-                        axios.post('/book/delete', {
-                            bookid: this.name
+                    deleteBook(e) {
+                        axios.delete('/book/'+e, {
+                            bookid: e
                         }).then(response => {
                             this.response = JSON.stringify(response, null, 2)
                     })
+                    },
+                    test:function(e) {
+                        //alert(e);
                     }
+
                 }
             })
         });
+
 </script>
 </body>
 </html>
