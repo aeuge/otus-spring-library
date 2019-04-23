@@ -14,8 +14,14 @@ public class BookDto {
     private List<String> genre = new ArrayList<>();
     private List<String> comment = new ArrayList<>();
 
+    public BookDto() { }
+
     public BookDto(String title) {
         this.title = title;
+    }
+
+    public BookDto(Book book) {
+        toDto(book);
     }
 
     public static BookDto toDto(Book book) {

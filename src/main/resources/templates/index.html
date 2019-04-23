@@ -24,31 +24,23 @@
     <tbody>
     <!-- This is a Vue2 template -->
     <tr v-for="book in books">
-        <td> {{book.id}}</td>
-        <td> {{book.title}}</td>
-        <td> {{book.author}}</td>
+        <td>{{book.id}}</td>
+        <td>{{book.title}}</td>
+        <td>{{book.author}}</td>
         <td>{{book.genre}}</td>
         <td>{{book.comment}}</td>
         <td>
-            <a :href="'/book?id='+book.id" th:text="#{general.edit}">Edit</a>
-
+            <a :href="'/book/'+book.id" th:text="#{general.edit}">Edit</a>
         </td>
         <td>
-            <div id="app" name="app">
-                    <button @click="deleteBook(book.id)" type="submit" value="value" class="btn-link" th:text="#{general.delete}">Delete</button>
-                    <div>
-                        <pre>{{ response }}</pre>
-                    </div>
-            </div>
+            <button @click="deleteBook(book.id)" type="submit" value="value" class="btn-link" th:text="#{general.delete}">Delete</button>
+            <div><pre>{{ response }}</pre></div>
         </td>
     </tr>
     </tbody>
 </table>
-<div class="text-white" style="width:200px">
-    <form method="get" action="/book">
-        <input name="id" readonly="readonly" value="new" type="hidden"/>
-        <button type="submit" class="btn btn-primary btn-block btn-large" th:text="#{general.new}">New book</button>
-    </form>
+<div>
+<a href="/book/new" class="text-white" th:text="#{general.new}">New</a>
 </div>
 <script>
     // fetch, ES6, Vue
@@ -66,13 +58,9 @@
                         axios.delete('/book/'+e, {
                             bookid: e
                         }).then(response => {
-                            this.response = JSON.stringify(response, null, 2)
+                            this.books=this.books.filter((b)=>b.id!=e);
                     })
                     },
-                    test:function(e) {
-                        //alert(e);
-                    }
-
                 }
             })
         });
