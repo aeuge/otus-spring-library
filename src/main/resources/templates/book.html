@@ -1,46 +1,108 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <script type="text/javascript" src="css/jquery-3.js"></script>
-    <link href="css/auth.css" rel="stylesheet">
+    <link href="/css/bootstrap.css" rel="stylesheet">
+    <script src="/css/jquery-3.js" type="text/javascript"></script>
+    <script src="/webjars/vue/2.5.16/vue.min.js"></script>
+    <script src="/css/axios.min.js"></script>
+    <link href="/css/auth.css" rel="stylesheet">
     <title th:text="#{general.info}">Info</title></head>
 <body><div class="TitleTop" th:text="#{general.info}">Info</div>
 
 <div style="width:500px" class="text-white">
-<form id="edit-form"  th:action="@{/book(id=${book.id})}" th:method="post" action="book.html">
+<div id="edit-form">
     <div>
-        <label for="id-input">ID:</label>
-        <input id="id-input" type="text" readonly="readonly" th:value="${book.id}" value="1"/>
+        <label for="id">ID:</label>
+        <input id="id" name="id" type="text" readonly="readonly" v-model="id"/>
     </div>
 
     <div>
-        <label for="title-input" th:text="#{general.title}">Title:</label>
-        <input id="title-input" name="title" type="text" th:value="${book.title}" value="Title"/>
+        <label for="title" th:text="#{general.title}">Title:</label>
+        <input id="title" name="title" type="text" v-model="title"/>
     </div>
     <div>
-        <label for="author-input" th:text="#{general.author}">Authors:</label>
-        <textarea id="author-input" name="author" type="text" th:field="${book.author}">Author</textarea>
+        <label for="author" th:text="#{general.author}">Authors:</label>
+        <textarea id="author" name="author" type="text" v-model="author"></textarea>
     </div>
     <div>
-        <label for="genre-input" th:text="#{general.genre}">Genres:</label>
-        <textarea id="genre-input" name="genre" th:field="${book.genre}">Genre</textarea>
+        <label for="genre" th:text="#{general.genre}">Genres:</label>
+        <textarea id="genre" name="genre" v-model="genre"></textarea>
     </div>
     <div>
-        <label for="comment-input" th:text="#{general.comment}">Comments:</label>
-        <textarea id="comment-input" name="comment" th:field="${book.comment}">Comment</textarea>
+        <label for="comment" th:text="#{general.comment}">Comments:</label>
+        <textarea id="comment" name="comment" v-model="comment"></textarea>
     </div>
-
+    <div><pre>{{ response }}</pre></div>
     <div class="text-white" style="width: 200px">
-        <button type="submit" class="btn btn-primary btn-block btn-large" th:text="#{general.save}">Save</button>
+        <button @click="saveBook(id)" value="value" class="btn-link" th:text="#{general.save}">Save</button>
     </div>
-</form>
+</div>
     <div class="text-white" style="width:200px">
         <form method="get" action="/">
             <button type="submit" class="btn btn-primary btn-block btn-large" th:text="#{general.gomain}">Back to main page</button>
         </form>
     </div>
 </div>
+<script th:inline="javascript">
+    // fetch, ES6, Vue
+    /*<![CDATA[*/
+    //var message = [[${id}]];
+    /*]]>*/
+    var currentLocation = window.location;
+    if (currentLocation.pathname != '/book/new') {
+    axios.get('/api/book/'+currentLocation.pathname.slice(6))
+    .then(bookDto => {
+        new Vue({
+            el: '#edit-form',
+            data: {
+                id : bookDto.data.id,
+                title: bookDto.data.title,
+                author: bookDto.data.author.join('\n'),
+                genre: bookDto.data.genre.join('\n'),
+                comment: bookDto.data.comment.join('\n'),
+                response : ''
+            },
+            methods: {
+                saveBook(e) {
+                    axios.post('/api/book/'+e, {
+                        id: this.id,
+                        title: this.title,
+                        author: Array.isArray(this.author) ? this.author : this.author.split("\n"),
+                        genre: Array.isArray(this.genre) ? this.genre : this.genre.split("\n"),
+                        comment: Array.isArray(this.comment) ? this.comment : this.comment.split("\n")
+                    }).then(response => {
+                        response.data=="ok" ? this.response = "изменения успешно сохранены" : this.response = "ошибка сохранения изменений";
+                })
+                },
+            }
+        })
+    })} else {
+        new Vue({
+            el: '#edit-form',
+            data: {
+                id : 'new',
+                title: '',
+                author: '',
+                genre: '',
+                comment: '',
+                response : ''
+            },
+            methods: {
+                saveBook(e) {
+                    axios.post('/api/book/'+e, {
+                        id: this.id,
+                        title: this.title,
+                        author: Array.isArray(this.author) ? this.author : this.author.split("\n"),
+                        genre: Array.isArray(this.genre) ? this.genre : this.genre.split("\n"),
+                        comment: Array.isArray(this.comment) ? this.comment : this.comment.split("\n")
+                    }).then(response => {
+                        response.data=="ok" ? this.response = "изменения успешно сохранены" : this.response = "ошибка сохранения изменений";
+                })
+                },
+            }
+        })
+    };
 
+</script>
 </body>
 </html>
