@@ -18,13 +18,12 @@ public class BookController {
     }
 
     @GetMapping("/")
-    public String listBook(Model model) {
+    public String listBook() {
         return "index";
     }
 
     @GetMapping("/book/{id}")
-    public String editBook(@PathVariable String id, Model model) {
-        model.addAttribute("id", id);
+    public String editBook(Model model) {
         return "book";
     }
 }

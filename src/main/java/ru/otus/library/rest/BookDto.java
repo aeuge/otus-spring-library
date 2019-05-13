@@ -6,6 +6,8 @@ import ru.otus.library.domain.Book;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ru.otus.library.rest.ConvertToDto.toDto;
+
 @Data
 public class BookDto {
     private String id;
@@ -20,17 +22,5 @@ public class BookDto {
         this.title = title;
     }
 
-    public BookDto(Book book) {
-        toDto(book);
-    }
-
-    public static BookDto toDto(Book book) {
-        BookDto bookDto = new BookDto(book.getTitle());
-        bookDto.setId(book.getId());
-        bookDto.setAuthor(book.getAuthor());
-        bookDto.setGenre(book.getGenre());
-        bookDto.setComment(book.getComment());
-        return bookDto;
-    }
-
+    public BookDto(Book book) { toDto(book); }
 }

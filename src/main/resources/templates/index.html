@@ -40,25 +40,27 @@
     </tbody>
 </table>
 <div>
-<a href="/book/new" class="text-white" th:text="#{general.new}">New</a>
+    <div class="text-white" style="width:200px">
+        <form method="get" action="/book/new">
+            <button type="submit" class="btn btn-primary btn-block btn-large" th:text="#{general.new}">Create new</button>
+        </form>
+    </div>
 </div>
 <script>
     // fetch, ES6, Vue
-    fetch('/api/books')
-        .then(response => response.json())
-        .then(books => {
+    axios.get('/api/allbooks')
+
+        .then(response => {
             new Vue({
                 el: '#books-table',
                 data: {
-                    books: books,
+                    books : response.data,
                     response:''
                 },
                 methods: {
                     deleteBook(e) {
-                        axios.delete('/book/'+e, {
-                            bookid: e
-                        }).then(response => {
-                            this.books=this.books.filter((b)=>b.id!=e);
+                        axios.delete('/book/'+e, {bookid: e})
+                            .then(response => {this.books=this.books.filter(b=>b.id!=e);
                     })
                     },
                 }

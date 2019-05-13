@@ -12,8 +12,8 @@
 <div style="width:500px" class="text-white">
 <div id="edit-form">
     <div>
-        <label for="id-input">ID:</label>
-        <input id="id-input" type="text" readonly="readonly" th:value="${id}" value="1"/>
+        <label for="id">ID:</label>
+        <input id="id" name="id" type="text" readonly="readonly" v-model="id"/>
     </div>
 
     <div>
@@ -46,19 +46,20 @@
 <script th:inline="javascript">
     // fetch, ES6, Vue
     /*<![CDATA[*/
-    var message = [[${id}]];
+    //var message = [[${id}]];
     /*]]>*/
-    fetch('/api/book/'+message)
-        .then(response => response.json())
+    var currentLocation = window.location;
+    if (currentLocation.pathname != '/book/new') {
+    axios.get('/api/book/'+currentLocation.pathname.slice(6))
     .then(bookDto => {
         new Vue({
             el: '#edit-form',
             data: {
-                id : bookDto.id,
-                title: bookDto.title,
-                author: bookDto.author.join('\n'),
-                genre: bookDto.genre.join('\n'),
-                comment: bookDto.comment.join('\n'),
+                id : bookDto.data.id,
+                title: bookDto.data.title,
+                author: bookDto.data.author.join('\n'),
+                genre: bookDto.data.genre.join('\n'),
+                comment: bookDto.data.comment.join('\n'),
                 response : ''
             },
             methods: {
@@ -75,7 +76,32 @@
                 },
             }
         })
-    });
+    })} else {
+        new Vue({
+            el: '#edit-form',
+            data: {
+                id : 'new',
+                title: '',
+                author: '',
+                genre: '',
+                comment: '',
+                response : ''
+            },
+            methods: {
+                saveBook(e) {
+                    axios.post('/api/book/'+e, {
+                        id: this.id,
+                        title: this.title,
+                        author: Array.isArray(this.author) ? this.author : this.author.split("\n"),
+                        genre: Array.isArray(this.genre) ? this.genre : this.genre.split("\n"),
+                        comment: Array.isArray(this.comment) ? this.comment : this.comment.split("\n")
+                    }).then(response => {
+                        response.data=="ok" ? this.response = "изменения успешно сохранены" : this.response = "ошибка сохранения изменений";
+                })
+                },
+            }
+        })
+    };
 
 </script>
 </body>

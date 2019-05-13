@@ -1,12 +1,15 @@
 package ru.otus.library.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.library.domain.Book;
 import ru.otus.library.repository.BookRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static ru.otus.library.rest.ConvertToDto.toDto;
 
 @RestController
 public class RestBookController {
@@ -18,9 +21,9 @@ public class RestBookController {
         this.repository = repository;
     }
 
-    @GetMapping("/api/books")
+    @GetMapping("/api/allbooks")
     public List<BookDto> getAllBooks() {
-        return repository.findAll().stream().map(BookDto::toDto)
+        return repository.findAll().stream().map(ConvertToDto::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -31,16 +34,16 @@ public class RestBookController {
             bookDto = new BookDto();
             bookDto.setId("new");
         } else {
-            bookDto = BookDto.toDto(repository.findById(id).orElseThrow(NotFoundException::new));
+            bookDto = toDto(repository.findById(id).orElseThrow(NotFoundException::new));
         }
         return bookDto;
     }
 
     @DeleteMapping("/book/{id}")
-    public String deleteBook(@PathVariable String id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteBook(@PathVariable String id) {
         Book book = repository.findById(id).orElseThrow(NotFoundException::new);
         repository.delete(book);
-        return "ok";
     }
 
     @PostMapping("/api/book/{id}")
