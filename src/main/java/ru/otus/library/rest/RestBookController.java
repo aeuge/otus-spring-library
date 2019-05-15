@@ -47,7 +47,7 @@ public class RestBookController {
         book.setAuthor(bookDto.getAuthor());
         book.setGenre(bookDto.getGenre());
         book.setComment(bookDto.getComment());
-        service.saveBook(book);
+        service.saveBook(Mono.just(book));
         return "ok";
     }
 }

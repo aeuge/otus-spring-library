@@ -46,7 +46,7 @@ public class BookServiceImpl implements BookService {
     public Mono<Book> getById(String id) { return dao.findById(id); }
 
     @Override
-    public void saveBook(Book book) { dao.save(book).subscribe(); }
+    public void saveBook(Mono<Book> book) { dao.save(book).subscribe(); }
 
     @Override
     public Flux<Book> getAll() { return dao.findAll(); }
