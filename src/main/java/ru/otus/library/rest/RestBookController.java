@@ -31,26 +31,22 @@ public class RestBookController {
 
     @DeleteMapping("/book/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteBook(@PathVariable String id) {
-        Mono<Book> book = service.getById(id);
-        //return service.deleteBook(book.);
+    public Mono<Void> deleteBook(@PathVariable String id) {
+        return service.deleteBook(id);
     }
 
     @PostMapping("/api/book/{id}")
     public String saveBook(@RequestBody BookDto bookDto) {
-        Mono<Book> book;
+        Book book;
         if (bookDto.getId().equals("new")) {
-            book = Mono.just(new Book());
+            book = new Book();
         } else {
-            book = service.getById(bookDto.getId());
+            book = service.getById(bookDto.getId()).block();
         }
-        book.map(x-> {
-            x.setTitle(bookDto.getTitle());
-            x.setAuthor(bookDto.getAuthor());
-            x.setGenre(bookDto.getGenre());
-            x.setComment(bookDto.getComment());
-            return x;
-        });
+        book.setTitle(bookDto.getTitle());
+        book.setAuthor(bookDto.getAuthor());
+        book.setGenre(bookDto.getGenre());
+        book.setComment(bookDto.getComment());
         service.saveBook(book);
         return "ok";
     }

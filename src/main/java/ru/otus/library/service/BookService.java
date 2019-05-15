@@ -15,12 +15,12 @@ public interface BookService {
     Flux<Book> getByAuthor(String author);
     Flux<Book> getByGenre(String genre);
     Mono<Book> getById(String id);
-    void saveBook(Mono<Book> book);
+    void saveBook(Book book);
     Flux<Book> getAll();
     Flux<Genre> getAllGenre();
     Flux<Author> getAllAuthor();
     Flux<Comment> getAllComment();
     Mono<Book> getByTitleExact(String title);
     Mono<Book> getByAuthorExact(String author);
-    void deleteBook(Book book);
+    Mono<Void> deleteBook(String id);
 }
