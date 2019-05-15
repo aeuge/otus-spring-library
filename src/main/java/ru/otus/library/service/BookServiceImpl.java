@@ -46,7 +46,7 @@ public class BookServiceImpl implements BookService {
     public Mono<Book> getById(String id) { return dao.findById(id); }
 
     @Override
-    public void saveBook(Book book) { dao.save(book); }
+    public void saveBook(Book book) { dao.save(book).subscribe(); }
 
     @Override
     public Flux<Book> getAll() { return dao.findAll(); }
@@ -61,6 +61,6 @@ public class BookServiceImpl implements BookService {
     public Flux<Comment> getAllComment() { return dao.findAllComment(); }
 
     @Override
-    public Mono<Void> deleteBook(String id) { return dao.deleteById(id); }
+    public void deleteBook(String id) { dao.deleteById(id).subscribe(); }
 
 }

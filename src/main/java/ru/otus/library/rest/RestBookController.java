@@ -31,8 +31,8 @@ public class RestBookController {
 
     @DeleteMapping("/book/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Mono<Void> deleteBook(@PathVariable String id) {
-        return service.deleteBook(id);
+    public void deleteBook(@PathVariable String id) {
+        service.deleteBook(id);
     }
 
     @PostMapping("/api/book/{id}")
