@@ -45,9 +45,6 @@
 </div>
 <script th:inline="javascript">
     // fetch, ES6, Vue
-    /*<![CDATA[*/
-    //var message = [[${id}]];
-    /*]]>*/
     var currentLocation = window.location;
     if (currentLocation.pathname != '/book/new') {
     axios.get('/api/book/'+currentLocation.pathname.slice(6))

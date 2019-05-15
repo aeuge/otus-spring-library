@@ -3,62 +3,55 @@ package ru.otus.library.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.otus.library.domain.Book;
 import ru.otus.library.repository.BookRepository;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static ru.otus.library.rest.ConvertToDto.toDto;
+import ru.otus.library.service.BookService;
 
 @RestController
 public class RestBookController {
 
-    private final BookRepository repository;
+    private final BookService service;
 
     @Autowired
-    public RestBookController(BookRepository repository) {
-        this.repository = repository;
+    public RestBookController(BookService service) {
+        this.service = service;
     }
 
     @GetMapping("/api/allbooks")
-    public List<BookDto> getAllBooks() {
-        return repository.findAll().stream().map(ConvertToDto::toDto)
-                .collect(Collectors.toList());
+    public Flux<BookDto> getAllBooks() {
+        return service.getAll().map(ConvertToDto::toDto);
     }
 
     @GetMapping("/api/book/{id}")
-    public BookDto getBook(@PathVariable String id) {
-        BookDto bookDto;
-        if (id.equals("new")) {
-            bookDto = new BookDto();
-            bookDto.setId("new");
-        } else {
-            bookDto = toDto(repository.findById(id).orElseThrow(NotFoundException::new));
-        }
-        return bookDto;
+    public Mono<BookDto> getBook(@PathVariable String id) {
+        return service.getById(id).map(ConvertToDto::toDto);
     }
 
     @DeleteMapping("/book/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteBook(@PathVariable String id) {
-        Book book = repository.findById(id).orElseThrow(NotFoundException::new);
-        repository.delete(book);
+        Mono<Book> book = service.getById(id);
+        //return service.deleteBook(book.);
     }
 
     @PostMapping("/api/book/{id}")
     public String saveBook(@RequestBody BookDto bookDto) {
-        Book book;
+        Mono<Book> book;
         if (bookDto.getId().equals("new")) {
-            book = new Book();
+            book = Mono.just(new Book());
         } else {
-            book = repository.findById(bookDto.getId()).orElseThrow(NotFoundException::new);
+            book = service.getById(bookDto.getId());
         }
-        book.setTitle(bookDto.getTitle());
-        book.setAuthor(bookDto.getAuthor());
-        book.setGenre(bookDto.getGenre());
-        book.setComment(bookDto.getComment());
-        repository.save(book);
+        book.map(x-> {
+            x.setTitle(bookDto.getTitle());
+            x.setAuthor(bookDto.getAuthor());
+            x.setGenre(bookDto.getGenre());
+            x.setComment(bookDto.getComment());
+            return x;
+        });
+        service.saveBook(book);
         return "ok";
     }
 }

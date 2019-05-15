@@ -33,7 +33,7 @@ public class MvcTest {
     @Test
     @DisplayName("должно вернуть книгу")
     public void test() throws Exception{
-        given(bookRepository.findById("1")).willReturn(java.util.Optional.of(new Book("Honda")));
+        //given(bookRepository.findById("1")).willReturn(java.util.Optional.of(new Book("Honda")));
         mvc.perform(
                 get("/book?id=1"))
                 .andExpect(status().isOk())

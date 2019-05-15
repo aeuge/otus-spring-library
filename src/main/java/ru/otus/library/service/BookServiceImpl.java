@@ -1,7 +1,12 @@
 package ru.otus.library.service;
 
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import ru.otus.library.domain.Author;
 import ru.otus.library.domain.Book;
+import ru.otus.library.domain.Comment;
+import ru.otus.library.domain.Genre;
 import ru.otus.library.repository.BookRepository;
 
 import java.util.List;
@@ -14,45 +19,48 @@ public class BookServiceImpl implements BookService {
     public BookServiceImpl(BookRepository dao) { this.dao = dao; }
 
     @Override
-    public Book getByTitleExact(String title) {
+    public Mono<Book> getByTitleExact(String title) {
         return dao.findByTitle(title);
     }
 
     @Override
-    public Book getByAuthorExact(String author) {
+    public Mono<Book> getByAuthorExact(String author) {
         return dao.findByAuthor(author);
     }
 
     @Override
-    public List<Book> getByTitle(String title) {
+    public Flux<Book> getByTitle(String title) {
         return dao.findByTitleContaining(title);
     }
 
     @Override
-    public List<Book> getByComment(String comment) { return dao.findByCommentRegex(".*" + comment + ".*"); }
+    public Flux<Book> getByComment(String comment) { return dao.findByCommentRegex(".*" + comment + ".*"); }
 
     @Override
-    public List<Book> getByAuthor(String author) { return dao.findByAuthorRegex(".*" + author + ".*"); }
+    public Flux<Book> getByAuthor(String author) { return dao.findByAuthorRegex(".*" + author + ".*"); }
 
     @Override
-    public List<Book> getByGenre(String genre) { return dao.findByGenreRegex(".*" + genre + ".*"); }
+    public Flux<Book> getByGenre(String genre) { return dao.findByGenreRegex(".*" + genre + ".*"); }
 
     @Override
-    public Book getById(String id) { return dao.findById(id).get(); }
+    public Mono<Book> getById(String id) { return dao.findById(id); }
 
     @Override
-    public void saveBook(Book book) { dao.save(book); }
+    public void saveBook(Mono<Book> book) { dao.save(book); }
 
     @Override
-    public List<Book> getAll() { return dao.findAll(); }
+    public Flux<Book> getAll() { return dao.findAll(); }
 
     @Override
-    public List<String> getAllGenre() { return dao.findAllGenre().stream().flatMap(genre -> genre.getGenre().stream()).distinct().collect(Collectors.toList()); }
+    public Flux<Genre> getAllGenre() { return dao.findAllGenre(); }
 
     @Override
-    public List<String> getAllAuthor() { return dao.findAllAuthor().stream().flatMap(author -> author.getAuthor().stream()).distinct().collect(Collectors.toList()); }
+    public Flux<Author> getAllAuthor() { return dao.findAllAuthor(); }
 
     @Override
-    public List<String> getAllComment() { return dao.findAllComment().stream().flatMap(comment -> comment.getComment().stream()).distinct().collect(Collectors.toList()); }
+    public Flux<Comment> getAllComment() { return dao.findAllComment(); }
+
+    @Override
+    public void deleteBook(Book book) { dao.delete(book); }
 
 }
