@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.otus.library.domain.Book;
-import ru.otus.library.repository.BookRepository;
 import ru.otus.library.service.BookService;
 
 @RestController
@@ -36,18 +35,14 @@ public class RestBookController {
     }
 
     @PostMapping("/api/book/{id}")
-    public String saveBook(@RequestBody BookDto bookDto) {
-        Book book;
-        if (bookDto.getId().equals("new")) {
-            book = new Book();
-        } else {
-            book = service.getById(bookDto.getId()).block();
-        }
-        book.setTitle(bookDto.getTitle());
-        book.setAuthor(bookDto.getAuthor());
-        book.setGenre(bookDto.getGenre());
-        book.setComment(bookDto.getComment());
-        service.saveBook(book);
-        return "ok";
+    public Mono<Book> saveBook(@RequestBody BookDto bookDto) {
+        return service.getById(bookDto.getId()).switchIfEmpty(Mono.just(new Book()))
+                .map(v -> {
+                    v.setTitle(bookDto.getTitle());
+                    v.setAuthor(bookDto.getAuthor());
+                    v.setGenre(bookDto.getGenre());
+                    v.setComment(bookDto.getComment());
+                    return v;
+                }).flatMap(service::saveBook);
     }
 }

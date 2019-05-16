@@ -68,7 +68,7 @@
                         genre: Array.isArray(this.genre) ? this.genre : this.genre.split("\n"),
                         comment: Array.isArray(this.comment) ? this.comment : this.comment.split("\n")
                     }).then(response => {
-                        response.data=="ok" ? this.response = "изменения успешно сохранены" : this.response = "ошибка сохранения изменений";
+                        response.status==200 ? this.response = "изменения успешно сохранены" : this.response = "ошибка сохранения изменений";
                 })
                 },
             }
@@ -93,7 +93,7 @@
                         genre: Array.isArray(this.genre) ? this.genre : this.genre.split("\n"),
                         comment: Array.isArray(this.comment) ? this.comment : this.comment.split("\n")
                     }).then(response => {
-                        response.data=="ok" ? this.response = "изменения успешно сохранены" : this.response = "ошибка сохранения изменений";
+                        response.status==200 ? this.response = "изменения успешно сохранены" : this.response = "ошибка сохранения изменений";
                 })
                 },
             }

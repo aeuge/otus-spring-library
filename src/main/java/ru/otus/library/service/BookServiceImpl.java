@@ -9,9 +9,6 @@ import ru.otus.library.domain.Comment;
 import ru.otus.library.domain.Genre;
 import ru.otus.library.repository.BookRepository;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 public class BookServiceImpl implements BookService {
     private BookRepository dao;
@@ -46,7 +43,7 @@ public class BookServiceImpl implements BookService {
     public Mono<Book> getById(String id) { return dao.findById(id); }
 
     @Override
-    public void saveBook(Book book) { dao.save(book); }
+    public Mono<Book> saveBook(Book book) { return dao.save(book); }
 
     @Override
     public Flux<Book> getAll() { return dao.findAll(); }

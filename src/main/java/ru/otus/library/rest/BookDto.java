@@ -2,7 +2,6 @@ package ru.otus.library.rest;
 
 import lombok.Data;
 import ru.otus.library.domain.Book;
-
 import java.util.ArrayList;
 import java.util.List;
 

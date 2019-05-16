@@ -10,9 +10,6 @@ import ru.otus.library.domain.Book;
 import ru.otus.library.domain.Comment;
 import ru.otus.library.domain.Genre;
 
-import java.util.List;
-import java.util.Optional;
-
 @Repository
 public interface BookRepository extends ReactiveMongoRepository<Book, String> {
     Flux<Book> findByTitleContaining(String title);
@@ -29,6 +26,5 @@ public interface BookRepository extends ReactiveMongoRepository<Book, String> {
     Mono<Book> findById(String id);
     Mono<Book> findByTitle(String title);
     Mono<Book> findByAuthor(String author);
-    Mono<Book> save(Book book);
     Mono<Void> deleteById(String id);
 }

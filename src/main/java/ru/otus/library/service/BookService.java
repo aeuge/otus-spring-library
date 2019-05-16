@@ -15,7 +15,7 @@ public interface BookService {
     Flux<Book> getByAuthor(String author);
     Flux<Book> getByGenre(String genre);
     Mono<Book> getById(String id);
-    void saveBook(Book book);
+    Mono<Book> saveBook(Book book);
     Flux<Book> getAll();
     Flux<Genre> getAllGenre();
     Flux<Author> getAllAuthor();
