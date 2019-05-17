@@ -9,9 +9,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import reactor.core.publisher.Flux;
 import ru.otus.library.domain.Book;
 import ru.otus.library.repository.BookRepository;
 import ru.otus.library.rest.BookController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -30,11 +34,14 @@ public class MvcTest {
     @MockBean
     private BookRepository bookRepository;
 
+    @MockBean
+    private BookService bookService;
+
     @Test
     @DisplayName("должно вернуть книгу")
     public void test() throws Exception{
-        Book book = new Book("Honda");
-        when(bookRepository.findAll()).thenReturn(book);
+        Flux<Book> book = Flux.just(new Book("Honda"));
+        when(bookService.getAll()).thenReturn(book);
 
         mvc.perform(
                 get("/api/allbooks"))
