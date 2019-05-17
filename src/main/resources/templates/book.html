@@ -93,7 +93,10 @@
                         genre: Array.isArray(this.genre) ? this.genre : this.genre.split("\n"),
                         comment: Array.isArray(this.comment) ? this.comment : this.comment.split("\n")
                     }).then(response => {
-                        response.status==200 ? this.response = "изменения успешно сохранены" : this.response = "ошибка сохранения изменений";
+                        if (response.status==200) {
+                            this.response = "изменения успешно сохранены";
+                            this.id=response.data.id;
+                        } else { this.response = "ошибка сохранения изменений";}
                 })
                 },
             }

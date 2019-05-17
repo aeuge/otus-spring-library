@@ -13,7 +13,7 @@ import ru.otus.library.domain.Book;
 import ru.otus.library.repository.BookRepository;
 import ru.otus.library.rest.BookController;
 
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -33,9 +33,11 @@ public class MvcTest {
     @Test
     @DisplayName("должно вернуть книгу")
     public void test() throws Exception{
-        //given(bookRepository.findById("1")).willReturn(java.util.Optional.of(new Book("Honda")));
+        Book book = new Book("Honda");
+        when(bookRepository.findAll()).thenReturn(book);
+
         mvc.perform(
-                get("/book?id=1"))
+                get("/api/allbooks"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("book"));
     }

@@ -58,6 +58,6 @@ public class BookServiceImpl implements BookService {
     public Flux<Comment> getAllComment() { return dao.findAllComment(); }
 
     @Override
-    public void deleteBook(String id) { dao.deleteById(id).subscribe(); }
+    public Mono<Void> deleteBook(String id) { return dao.deleteById(id); }
 
 }

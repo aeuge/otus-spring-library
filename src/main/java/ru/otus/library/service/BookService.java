@@ -22,5 +22,5 @@ public interface BookService {
     Flux<Comment> getAllComment();
     Mono<Book> getByTitleExact(String title);
     Mono<Book> getByAuthorExact(String author);
-    void deleteBook(String id);
+    Mono<Void> deleteBook(String id);
 }
