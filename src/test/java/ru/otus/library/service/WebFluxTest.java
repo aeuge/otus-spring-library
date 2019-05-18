@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import reactor.core.publisher.Flux;
@@ -21,7 +22,6 @@ import ru.otus.library.rest.RestBookController;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.Matchers.instanceOf;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -31,11 +31,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @AutoConfigureMockMvc(secure = false)
-@WebMvcTest(BookController.class)
-@DisplayName("Тестирование контроллера mvc")
-public class MvcTest {
+@org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
+@DisplayName("Тестирование рест контроллера WebFlux")
+public class WebFluxTest {
     @Autowired
-    private MockMvc mvc;
+    private WebTestClient fluxTest;
 
     @MockBean
     private BookRepository bookRepository;
@@ -44,10 +44,14 @@ public class MvcTest {
     private BookService bookService;
 
     @Test
-    @DisplayName("должно вернуть корневую страницу")
+    @DisplayName("должен вернуться список книг")
     public void test() throws Exception{
-        mvc.perform(
-                get("/"))
-                .andExpect(status().isOk());
+        Flux<Book> book = Flux.just(new Book("Honda"));
+        when(bookService.getAll()).thenReturn(book);
+
+        fluxTest.get().uri("/api/allbooks")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody().json("[{\"id\":null,\"title\":\"Honda\",\"author\":[],\"genre\":[],\"comment\":[]}]");
     }
 }

@@ -52,8 +52,6 @@ class BookRepositoryTest {
         Flux<Book> book = bookRepository.findByAuthorRegex("Иар");
         StepVerifier
                 .create(book)
-                .assertNext(b -> assertEquals(b.getAuthor().toString(), "[Эльтеррус Иар]"))
-                .expectComplete()
-                .verify();
+                .assertNext(b -> assertEquals(b.getAuthor().toString(), "[Эльтеррус Иар]"));
     }
 }
