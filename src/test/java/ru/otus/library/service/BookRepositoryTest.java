@@ -10,10 +10,6 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 import ru.otus.library.domain.Book;
 import ru.otus.library.repository.BookRepository;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
