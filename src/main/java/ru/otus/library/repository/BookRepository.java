@@ -1,30 +1,30 @@
 package ru.otus.library.repository;
 
 import org.springframework.data.mongodb.repository.Query;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.otus.library.domain.Author;
 import ru.otus.library.domain.Book;
 import ru.otus.library.domain.Comment;
 import ru.otus.library.domain.Genre;
 
-import java.util.List;
-import java.util.Optional;
-
 @Repository
-public interface BookRepository extends CrudRepository<Book, String> {
-    List<Book> findByTitleContaining(String title);
-    List<Book> findByCommentRegex(String comment);
-    List<Book> findByAuthorRegex(String author);
-    List<Book> findByGenreRegex(String genre);
-    List<Book> findAll();
+public interface BookRepository extends ReactiveMongoRepository<Book, String> {
+    Flux<Book> findByTitleContaining(String title);
+    Flux<Book> findByCommentRegex(String comment);
+    Flux<Book> findByAuthorRegex(String author);
+    Flux<Book> findByGenreRegex(String genre);
+    Flux<Book> findAll();
     @Query("{},{genre:1}")
-    List<Genre> findAllGenre();
+    Flux<Genre> findAllGenre();
     @Query("{},{author:1}")
-    List<Author> findAllAuthor();
+    Flux<Author> findAllAuthor();
     @Query("{},{comment:1}")
-    List<Comment> findAllComment();
-    Optional<Book> findById(String id);
-    Book findByTitle(String title);
-    Book findByAuthor(String author);
+    Flux<Comment> findAllComment();
+    Mono<Book> findById(String id);
+    Mono<Book> findByTitle(String title);
+    Mono<Book> findByAuthor(String author);
+    Mono<Void> deleteById(String id);
 }

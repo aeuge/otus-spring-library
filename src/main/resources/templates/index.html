@@ -59,7 +59,7 @@
                 },
                 methods: {
                     deleteBook(e) {
-                        axios.delete('/book/'+e, {bookid: e})
+                        axios.delete(`/book/${e}`, {bookid: e})
                             .then(response => {this.books=this.books.filter(b=>b.id!=e);
                     })
                     },

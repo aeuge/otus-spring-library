@@ -9,14 +9,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.otus.library.domain.Book;
 import ru.otus.library.repository.BookRepository;
 import ru.otus.library.rest.BookController;
-
-import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -30,13 +25,14 @@ public class MvcTest {
     @MockBean
     private BookRepository bookRepository;
 
+    @MockBean
+    private BookService bookService;
+
     @Test
-    @DisplayName("должно вернуть книгу")
+    @DisplayName("должно вернуть корневую страницу")
     public void test() throws Exception{
-        given(bookRepository.findById("1")).willReturn(java.util.Optional.of(new Book("Honda")));
         mvc.perform(
-                get("/book?id=1"))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("book"));
+                get("/"))
+                .andExpect(status().isOk());
     }
 }
