@@ -14,7 +14,7 @@ import ru.otus.library.service.MongoUserDetailsService;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
-    MongoUserDetailsService userDetailsService;
+    private MongoUserDetailsService userDetailsService;
 
     //@Override
     //public void configure(WebSecurity web) {web.ignoring().antMatchers("/");}
