@@ -4,16 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import ru.otus.library.service.MongoUserDetailsService;
 
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-
+    @Autowired
+    MongoUserDetailsService userDetailsService;
 
     //@Override
     //public void configure(WebSecurity web) {web.ignoring().antMatchers("/");}
@@ -31,6 +32,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 // Включает HTTP-basic
                 //.httpBasic()
                 .and()
+                .logout().logoutSuccessUrl("/")
+                .and()
                 // Включает Remember-me аутентифкацию
                 .rememberMe().key("someSecret")
         ;
@@ -44,7 +47,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("admin").password("admin").roles("ADMIN");
+        auth.userDetailsService(userDetailsService);
+        //auth.inMemoryAuthentication().withUser("admin").password("admin").roles("ADMIN");
     }
 }

@@ -25,4 +25,10 @@ public class DatabaseChangelog {
         dbObject = (DBObject) JSON.parse("{'title':'Отзвуки серебряного ветра','author':'Эльтеррус Иар','genre':'Фантастика','comment':'+++'}");
         myCollection.insert(dbObject);
     }
+    @ChangeSet(order = "003", id = "addUser", author = "aeuge")
+    public void insertBasicUser(DB db) {
+        DBCollection myCollection = db.getCollection("users");
+        DBObject dbObject = (DBObject) JSON.parse("{'username':'admin','password':'admin','roles':'ADMIN'}");
+        myCollection.insert(dbObject);
+    }
 }
