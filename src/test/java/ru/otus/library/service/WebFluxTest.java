@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
@@ -14,7 +15,7 @@ import ru.otus.library.repository.BookRepository;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
-@AutoConfigureMockMvc(secure = false)
+@AutoConfigureMockMvc(secure = true)
 @org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 @DisplayName("Тестирование рест контроллера WebFlux")
 public class WebFluxTest {
@@ -27,6 +28,11 @@ public class WebFluxTest {
     @MockBean
     private BookService bookService;
 
+    @WithMockUser(
+            username = "admin",
+            password = "admin",
+            authorities = {"ADMIN"}
+    )
     @Test
     @DisplayName("должен вернуться список книг")
     public void test() throws Exception{
