@@ -43,7 +43,7 @@ public class SecurityConfiguration {
         ;
         return http.build(); //4
     }
-    
+
     @SuppressWarnings("deprecation")
     @Bean
     public PasswordEncoder passwordEncoder() {
