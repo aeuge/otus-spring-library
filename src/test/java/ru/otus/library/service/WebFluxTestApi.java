@@ -12,13 +12,14 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import ru.otus.library.domain.Book;
 import ru.otus.library.repository.BookRepository;
+
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 @AutoConfigureMockMvc(secure = true)
 @org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 @DisplayName("Тестирование рест контроллера WebFlux")
-public class WebFluxTest {
+public class WebFluxTestApi {
     @Autowired
     private WebTestClient fluxTest;
 
@@ -43,5 +44,17 @@ public class WebFluxTest {
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody().json("[{\"id\":null,\"title\":\"Honda\",\"author\":[],\"genre\":[],\"comment\":[]}]");
+    }
+    @WithMockUser(
+            username = "admin",
+            password = "admin",
+            authorities = {"ADMIN"}
+    )
+    @Test
+    @DisplayName("должна вернутся корневая страница")
+    public void test2() throws Exception{
+        fluxTest.get().uri("/")
+                .exchange()
+                .expectStatus().isOk();
     }
 }

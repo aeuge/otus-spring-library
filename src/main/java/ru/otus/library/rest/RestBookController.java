@@ -2,6 +2,7 @@ package ru.otus.library.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -19,7 +20,8 @@ public class RestBookController {
     }
 
     @GetMapping("/api/allbooks")
-    public Flux<BookDto> getAllBooks() {
+    public Flux<BookDto> getAllBooks(java.security.Principal principal) {
+        System.out.println("Authorities: "+ ((Authentication) principal).getAuthorities());
         return service.getAll().map(ConvertToDto::toDto);
     }
 
