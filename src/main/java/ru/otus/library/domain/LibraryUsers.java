@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 @Document("users")
-public class Users {
+public class LibraryUsers {
         @Id
         public String id;
 
@@ -17,7 +17,7 @@ public class Users {
         public String password;
         public List<String> roles = new ArrayList<>();
 
-        public Users(String username, String password, List<String> roles) {
+        public LibraryUsers(String username, String password, List<String> roles) {
                 this.username = username;
                 this.password = password;
                 this.roles.addAll(roles);

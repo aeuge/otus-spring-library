@@ -22,12 +22,12 @@ public class RestBookController {
     @GetMapping("/api/allbooks")
     public Flux<BookDto> getAllBooks(java.security.Principal principal) {
         System.out.println("Authorities: "+ ((Authentication) principal).getAuthorities());
-        return service.getAll().map(ConvertToDto::toDto);
+        return service.getAll().map(ConverterBookToDto::toDto);
     }
 
     @GetMapping("/api/book/{id}")
     public Mono<BookDto> getBook(@PathVariable String id) {
-        return service.getById(id).map(ConvertToDto::toDto);
+        return service.getById(id).map(ConverterBookToDto::toDto);
     }
 
     @DeleteMapping("/book/{id}")

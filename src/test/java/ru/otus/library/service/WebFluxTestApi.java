@@ -16,7 +16,7 @@ import ru.otus.library.repository.BookRepository;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
-@AutoConfigureMockMvc(secure = true)
+@AutoConfigureMockMvc
 @org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 @DisplayName("Тестирование рест контроллера WebFlux")
 public class WebFluxTestApi {
