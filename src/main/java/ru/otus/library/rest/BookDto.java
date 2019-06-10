@@ -5,7 +5,7 @@ import ru.otus.library.domain.Book;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ru.otus.library.rest.ConvertToDto.toDto;
+import static ru.otus.library.rest.ConverterBookToDto.toDto;
 
 @Data
 public class BookDto {

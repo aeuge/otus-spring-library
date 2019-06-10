@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.otus.library.repository.BookRepository;
@@ -15,10 +16,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@AutoConfigureMockMvc(secure = false)
+@AutoConfigureMockMvc(secure = true)
 @WebMvcTest(BookController.class)
 @DisplayName("Тестирование контроллера mvc")
-public class MvcTest {
+public class WebFluxMvcTest {
     @Autowired
     private MockMvc mvc;
 
@@ -28,6 +29,14 @@ public class MvcTest {
     @MockBean
     private BookService bookService;
 
+    @MockBean
+    private MongoUserDetailsService userDetailsService;
+
+    @WithMockUser(
+            username = "admin",
+            password = "admin",
+            authorities = {"ADMIN"}
+    )
     @Test
     @DisplayName("должно вернуть корневую страницу")
     public void test() throws Exception{
