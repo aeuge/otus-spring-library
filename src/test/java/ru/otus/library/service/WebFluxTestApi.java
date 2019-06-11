@@ -4,7 +4,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureWebMvc;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -12,12 +13,13 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import ru.otus.library.domain.Book;
 import ru.otus.library.repository.BookRepository;
+import ru.otus.library.rest.BookController;
 
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
-@AutoConfigureMockMvc
-@org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
+@AutoConfigureWebMvc
+@WebFluxTest
 @DisplayName("Тестирование рест контроллера WebFlux")
 public class WebFluxTestApi {
     @Autowired
@@ -45,16 +47,12 @@ public class WebFluxTestApi {
                 .expectStatus().isOk()
                 .expectBody().json("[{\"id\":null,\"title\":\"Honda\",\"author\":[],\"genre\":[],\"comment\":[]}]");
     }
-    @WithMockUser(
-            username = "admin",
-            password = "admin",
-            authorities = {"ADMIN"}
-    )
+
+
+    @WithMockUser(username = "admin", password = "admin", authorities = {"ADMIN"})
     @Test
-    @DisplayName("должна вернутся корневая страница")
-    public void test2() throws Exception{
-        fluxTest.get().uri("/")
-                .exchange()
-                .expectStatus().isOk();
+    @DisplayName("должно вернуть корневую страницу")
+    public void test3() throws Exception{
+        fluxTest.get().uri("/").exchange().expectStatus().isOk();
     }
 }
