@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Document("users")
@@ -15,11 +16,15 @@ public class LibraryUsers {
 
         public String username;
         public String password;
-        public List<String> roles = new ArrayList<>();
+        public List<Privilege> roles = new ArrayList<>();
 
-        public LibraryUsers(String username, String password, List<String> roles) {
+        public LibraryUsers(String username, String password, List<Privilege> roles) {
                 this.username = username;
                 this.password = password;
                 this.roles.addAll(roles);
+        }
+
+        public List<String> getRolesByString () {
+                return roles.stream().map(Privilege::getName).collect(Collectors.toList());
         }
 }
