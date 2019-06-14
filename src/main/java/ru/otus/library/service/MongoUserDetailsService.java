@@ -10,6 +10,7 @@ import ru.otus.library.domain.Privilege;
 import ru.otus.library.repository.UsersRepository;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class MongoUserDetailsService implements ReactiveUserDetailsService {
