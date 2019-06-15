@@ -27,8 +27,8 @@ public class InitUsersService {
         Privilege privilege = new Privilege("1", "ROLE_ADMIN");
         Privilege privilege2 = new Privilege("2", "ROLE_USER");
         LibraryUsers user = new LibraryUsers("admin", newpassword, List.of(privilege));
-        privilegeRepository.save(privilege);
-        privilegeRepository.save(privilege2);
-        usersRepository.save(user);
+        privilegeRepository.save(privilege).subscribe();
+        privilegeRepository.save(privilege2).subscribe();
+        usersRepository.save(user).subscribe();
     }
 }
