@@ -1,6 +1,7 @@
 package ru.otus.library.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import ru.otus.library.repository.BookRepository;
@@ -16,6 +17,7 @@ public class BookController {
     }
 
     @GetMapping("/")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String listBook() {
         return "index";
     }

@@ -23,12 +23,20 @@ public class InitUsersService {
 
     public void initPrivilegesAndUSers() {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(11);
-        String newpassword = passwordEncoder.encode("admin");
+        String adminpassword = passwordEncoder.encode("admin");
+        String userpassword = passwordEncoder.encode("user");
         Privilege privilege = new Privilege("1", "ROLE_ADMIN");
         Privilege privilege2 = new Privilege("2", "ROLE_USER");
-        LibraryUsers user = new LibraryUsers("admin", newpassword, List.of(privilege));
+        Privilege privilege3 = new Privilege("100", "BOOK_READ_PRIVILEGE");
+        Privilege privilege4 = new Privilege("101", "BOOK_WRITE_PRIVILEGE");
+        LibraryUsers admin = new LibraryUsers("admin", adminpassword, List.of(privilege, privilege3, privilege4));
+        LibraryUsers user = new LibraryUsers("user", userpassword, List.of(privilege2, privilege3));
         privilegeRepository.save(privilege).subscribe();
         privilegeRepository.save(privilege2).subscribe();
+        privilegeRepository.save(privilege3).subscribe();
+        privilegeRepository.save(privilege4).subscribe();
+        usersRepository.deleteAll().subscribe();
+        usersRepository.save(admin).subscribe();
         usersRepository.save(user).subscribe();
     }
 }

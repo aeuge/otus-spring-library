@@ -22,7 +22,9 @@ public class MongoUserDetailsService implements ReactiveUserDetailsService {
 
     @Override
     public Mono<UserDetails> findByUsername(String username) {
-        Mono<UserDetails> user = repository.findByUsername(username).switchIfEmpty(Mono.just(new LibraryUsers("anonymous","anonymous",Arrays.asList(new Privilege("NONE"))))).map(LibraryUsersConverterService::toUser);
+        Mono<UserDetails> user = repository.findByUsername(username).
+                switchIfEmpty(Mono.just(new LibraryUsers("anonymous","anonymous",Arrays.asList(new Privilege("NONE"))))).
+                map(LibraryUsersConverterService::toUser);
         return user;
     }
 }
