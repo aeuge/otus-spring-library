@@ -5,6 +5,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serializable;
+import java.security.Principal;
 
 public class CustomPermissionEvaluator implements PermissionEvaluator {
     @Override

@@ -23,7 +23,8 @@ public class RestBookController {
     }
 
     @GetMapping("/api/allbooks")
-    @PreAuthorize("hasPermission(returnObject, 'read')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    //@PreAuthorize("hasPermission(returnObject, 'read')")
     public Flux<BookDto> getAllBooks(Principal principal) {
         System.out.println("Authorities: "+ ((Authentication) principal).getAuthorities());
         return service.getAll().map(ConverterBookToDto::toDto);

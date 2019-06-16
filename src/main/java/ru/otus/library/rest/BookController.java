@@ -17,7 +17,6 @@ public class BookController {
     }
 
     @GetMapping("/")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String listBook() {
         return "index";
     }
