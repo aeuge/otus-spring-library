@@ -23,10 +23,10 @@ public class RestBookController {
     }
 
     @GetMapping("/api/allbooks")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     //@PreAuthorize("hasPermission(returnObject, 'read')")
+    @PreAuthorize("@reactivePermissionEvaluator.hasPermission('book', 'read')")
     public Flux<BookDto> getAllBooks(Principal principal) {
-        System.out.println("Authorities: "+ ((Authentication) principal).getAuthorities());
+        System.out.println("Privileges: " + ((Authentication) principal).getAuthorities());
         return service.getAll().map(ConverterBookToDto::toDto);
     }
 
@@ -37,6 +37,7 @@ public class RestBookController {
 
     @DeleteMapping("/book/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public Mono<Void> deleteBook(@PathVariable String id) {
         return service.deleteBook(id);
     }
