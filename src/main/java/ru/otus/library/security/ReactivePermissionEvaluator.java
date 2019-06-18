@@ -5,9 +5,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.web.method.annotation.AuthenticationPrincipalArgumentResolver;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+import ru.otus.library.rest.RestBookController;
 
 import java.io.Serializable;
 import java.security.Principal;
@@ -38,12 +42,13 @@ public class ReactivePermissionEvaluator {
     private boolean hasPrivilege(String targetType, String permission) {
 
         Mono<User> principal = ReactiveSecurityContextHolder.getContext()
-                //.switchIfEmpty(Mono.error(new IllegalStateException("ReactiveSecurityContext is empty")))
+                .switchIfEmpty(Mono.error(new IllegalStateException("ReactiveSecurityContext is empty")))
                 .map(SecurityContext::getAuthentication)
                 .map(Authentication::getPrincipal)
                 .cast(User.class);
         User user = (User) principal.subscribe();
-        Set<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream().collect(Collectors.toSet());
+
+        Set<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream().collect(Collectors.toSet());*/
         for (GrantedAuthority grantedAuth : grantedAuthorities) {
             if (grantedAuth.getAuthority().startsWith(targetType)) {
                 if (grantedAuth.getAuthority().contains(permission)) {
@@ -52,6 +57,10 @@ public class ReactivePermissionEvaluator {
             }
         }
         return false;
+    }
+
+    public Principal getPrincipal (Principal principal) {
+        return principal;
     }
 
     public boolean test (String s) {
