@@ -39,7 +39,7 @@ public class InitUsersService {
         privilegeRepository.save(privilege3).subscribe();
         privilegeRepository.save(privilege4).subscribe();
         usersRepository.deleteAll().subscribe();
-        sleep(100);
+        sleep(1000);
         usersRepository.save(admin).subscribe();
         usersRepository.save(user).subscribe();
     }

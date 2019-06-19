@@ -11,9 +11,9 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.otus.library.domain.Book;
 import ru.otus.library.repository.BookRepository;
-import ru.otus.library.rest.BookController;
 
 import static org.mockito.Mockito.when;
 
@@ -54,5 +54,20 @@ public class WebFluxTestApi {
     @DisplayName("должно вернуть корневую страницу")
     public void test3() throws Exception{
         fluxTest.get().uri("/").exchange().expectStatus().isOk();
+    }
+
+    @WithMockUser(
+            username = "user",
+            password = "user"
+    )
+    @Test
+    @DisplayName("не должно вернуть книгу пользователю без прав на запись")
+    public void testUser() throws Exception{
+        Mono<Book> book = Mono.just(new Book("Honda"));
+        when(bookService.getById("1")).thenReturn(book);
+
+        fluxTest.get().uri("/api/book/1")
+                .exchange()
+                .expectStatus().isOk();
     }
 }

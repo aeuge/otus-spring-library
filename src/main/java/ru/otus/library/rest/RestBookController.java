@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -24,13 +25,14 @@ public class RestBookController {
 
     @GetMapping("/api/allbooks")
     //@PreAuthorize("hasPermission(returnObject, 'read')")
-    @PreAuthorize("@reactivePermissionEvaluator.hasPermission('book', 'read')")
-    public Flux<BookDto> getAllBooks(Principal principal) {
+    @PreAuthorize("@reactivePermissionEvaluator.hasPermission(#principal, 'book', 'read')")
+    public Flux<BookDto> getAllBooks(@AuthenticationPrincipal(expression = "principal") Principal principal) {
         System.out.println("Privileges: " + ((Authentication) principal).getAuthorities());
         return service.getAll().map(ConverterBookToDto::toDto);
     }
 
     @GetMapping("/api/book/{id}")
+    @PreAuthorize("@reactivePermissionEvaluator.hasPermission(#principal, 'book', 'write')")
     public Mono<BookDto> getBook(@PathVariable String id) {
         return service.getById(id).map(ConverterBookToDto::toDto);
     }
@@ -43,7 +45,8 @@ public class RestBookController {
     }
 
     @PostMapping("/api/book/{id}")
-    public Mono<Book> saveBook(@RequestBody BookDto bookDto) {
+    @PreAuthorize("@reactivePermissionEvaluator.hasPermission(#principal, 'book', 'write')")
+    public Mono<Book> saveBook(@RequestBody BookDto bookDto, @AuthenticationPrincipal(expression = "principal") Principal principal) {
         return service.getById(bookDto.getId()).switchIfEmpty(Mono.just(new Book()))
                 .map(v -> {
                     v.setTitle(bookDto.getTitle());
