@@ -26,9 +26,6 @@ public class WebFluxTestApi {
     private WebTestClient fluxTest;
 
     @MockBean
-    private BookRepository bookRepository;
-
-    @MockBean
     private BookService bookService;
 
     @WithMockUser(
@@ -56,18 +53,5 @@ public class WebFluxTestApi {
         fluxTest.get().uri("/").exchange().expectStatus().isOk();
     }
 
-    @WithMockUser(
-            username = "user",
-            password = "user"
-    )
-    @Test
-    @DisplayName("не должно вернуть книгу пользователю без прав на запись")
-    public void testUser() throws Exception{
-        Mono<Book> book = Mono.just(new Book("Honda"));
-        when(bookService.getById("1")).thenReturn(book);
 
-        fluxTest.get().uri("/api/book/1")
-                .exchange()
-                .expectStatus().isOk();
-    }
 }
