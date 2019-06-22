@@ -1,23 +1,21 @@
 package ru.otus.library.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
-import ru.otus.library.service.MongoUserDetailsService;
 
 @EnableWebFluxSecurity
+@EnableReactiveMethodSecurity
 public class SecurityConfiguration {
-    @Autowired
-    private MongoUserDetailsService userDetailsService;
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http.csrf().disable()
-                .authorizeExchange().pathMatchers( "/", "/api/allbooks").hasRole("ADMIN")
+                .authorizeExchange().pathMatchers( "/", "/api/allbooks").authenticated()//hasRole("ADMIN")
                 .anyExchange().permitAll()
                 .and()
                 .formLogin()

@@ -2,7 +2,9 @@ package ru.otus.library.domain;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import ru.otus.library.service.MongoPrivilegeService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,7 @@ public class LibraryUsers {
 
         public String username;
         public String password;
+        @DBRef
         public List<Privilege> roles = new ArrayList<>();
 
         public LibraryUsers(String username, String password, List<Privilege> roles) {

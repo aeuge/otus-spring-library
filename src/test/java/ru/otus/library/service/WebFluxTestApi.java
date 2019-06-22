@@ -11,9 +11,9 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ru.otus.library.domain.Book;
 import ru.otus.library.repository.BookRepository;
-import ru.otus.library.rest.BookController;
 
 import static org.mockito.Mockito.when;
 
@@ -24,9 +24,6 @@ import static org.mockito.Mockito.when;
 public class WebFluxTestApi {
     @Autowired
     private WebTestClient fluxTest;
-
-    @MockBean
-    private BookRepository bookRepository;
 
     @MockBean
     private BookService bookService;
@@ -55,4 +52,6 @@ public class WebFluxTestApi {
     public void test3() throws Exception{
         fluxTest.get().uri("/").exchange().expectStatus().isOk();
     }
+
+
 }

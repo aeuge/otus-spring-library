@@ -6,6 +6,6 @@ import reactor.core.publisher.Mono;
 import ru.otus.library.domain.*;
 
 @Repository
-public interface UsersRepository extends ReactiveMongoRepository<LibraryUsers, String> {
+public interface LibraryUsersRepository extends ReactiveMongoRepository<LibraryUsers, String> {
     Mono<LibraryUsers> findByUsername(String username);
 }
