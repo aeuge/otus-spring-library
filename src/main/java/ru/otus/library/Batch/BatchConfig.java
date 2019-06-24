@@ -65,7 +65,7 @@ public class BatchConfig {
                 .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
                 .sql("INSERT INTO book (book_id, title) VALUES (:id, :title)")
                 .sql("INSERT INTO author (fk_book, author) VALUES (:id, :author)")
-                .sql("INSERT INTO comment (fk_book, comment) VALUES (:id, :comment)")
+                //.sql("INSERT INTO comment (fk_book, comment) VALUES (:id, :comment)")
                 .dataSource(dataSource)
                 .build()
         ;
