@@ -10,17 +10,18 @@ import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.file.FlatFileItemWriter;
-import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
-import org.springframework.batch.item.file.builder.FlatFileItemWriterBuilder;
-import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
-import org.springframework.batch.item.file.transform.DelimitedLineAggregator;
+import org.springframework.batch.item.data.builder.MongoItemReaderBuilder;
+import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
+import org.springframework.batch.item.database.JdbcBatchItemWriter;
+import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.FileSystemResource;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import ru.otus.library.domain.Book;
 
+import javax.sql.DataSource;
+import java.util.HashMap;
 import java.util.List;
 
 @EnableBatchProcessing
@@ -34,23 +35,20 @@ public class BatchConfig {
     @Autowired
     public StepBuilderFactory stepBuilderFactory;
 
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
+    @Autowired
+    DataSource dataSource;
+
     @Bean
     public ItemReader<Book> reader() {
-        /*return new MongoItemReaderBuilder<Person>()
-                .name("mongoPersonReader")
+        return new MongoItemReaderBuilder<Book>()
+                .name("mongoBookReader")
                 .template(mongoTemplate)
-                .targetType(Person.class)
+                .targetType(Book.class)
                 .jsonQuery("{}")
                 .sorts(new HashMap<>())
-                .build();*/
-        return new FlatFileItemReaderBuilder<Book>()
-                .name("personItemReader")
-                .resource(new FileSystemResource("entries.csv"))
-                .delimited()
-                .names(new String[]{"name", "age"})
-                .fieldSetMapper(new BeanWrapperFieldSetMapper<Book>() {{
-                    setTargetType(Book.class);
-                }})
                 .build();
     }
 
@@ -62,20 +60,22 @@ public class BatchConfig {
     }
 
     @Bean
-    public FlatFileItemWriter writer() {
-        return new FlatFileItemWriterBuilder<>()
-                .name("personItemWriter")
-                .resource(new FileSystemResource("output.csv"))
-                .lineAggregator(new DelimitedLineAggregator<>())
-                .build();
+    public JdbcBatchItemWriter<Book> writer() {
+        return new JdbcBatchItemWriterBuilder<Book>()
+                .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
+                .sql("INSERT INTO book (book_id, title) VALUES (:id, :title)")
+                .sql("INSERT INTO author (fk_book, author) VALUES (:id, :author)")
+                .sql("INSERT INTO comment (fk_book, comment) VALUES (:id, :comment)")
+                .dataSource(dataSource)
+                .build()
+        ;
     }
 
     @Bean
-    public Job importUserJob(Step step1) {
-        return jobBuilderFactory.get("importUserJob")
+    public Job importBookJob(Step step1) {
+        return jobBuilderFactory.get("importBookJob")
                 .incrementer(new RunIdIncrementer())
-                .flow(step1)
-                .end()
+                .start(step1)
                 .listener(new JobExecutionListener() {
                     @Override
                     public void beforeJob(JobExecution jobExecution) {
@@ -91,7 +91,7 @@ public class BatchConfig {
     }
 
     @Bean
-    public Step step1(FlatFileItemWriter writer, ItemReader reader, ItemProcessor itemProcessor) {
+    public Step step1(JdbcBatchItemWriter writer, ItemReader reader, ItemProcessor itemProcessor) {
         return stepBuilderFactory.get("step1")
                 .chunk(5)
                 .reader(reader)
