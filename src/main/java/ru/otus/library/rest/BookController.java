@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class BookController {
-    @Autowired
     private JobLauncher jobLauncher;
-
-    @Autowired
     private Job importBookJob;
+
+    public BookController(JobLauncher jobLauncher, Job importBookJob ) {
+        this.jobLauncher = jobLauncher;
+        this.importBookJob = importBookJob;
+    }
 
     @GetMapping("/")
     public String listBook() {

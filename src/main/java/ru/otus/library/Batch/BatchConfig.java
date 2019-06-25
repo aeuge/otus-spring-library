@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import ru.otus.library.domain.Book;
 
@@ -158,7 +159,7 @@ public class BatchConfig {
                     public void afterChunk(ChunkContext chunkContext) {logger.info("Конец пачки");}
                     public void afterChunkError(ChunkContext chunkContext) {logger.info("Ошибка пачки");}
                 })
-//                .taskExecutor(new SimpleAsyncTaskExecutor())
+                .taskExecutor(new SimpleAsyncTaskExecutor())
                 .build();
     }
 }

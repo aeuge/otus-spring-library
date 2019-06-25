@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListCommentWriter implements ItemWriter<Book> {
-        private ItemWriter<Book> _commentWriter;
+        private ItemWriter<Book> commentWriter;
 
         public ListCommentWriter ( JdbcBatchItemWriter<Book> commentWriter ) {
-            _commentWriter = commentWriter;
+            this.commentWriter = commentWriter;
         }
 
         @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
@@ -24,7 +24,7 @@ public class ListCommentWriter implements ItemWriter<Book> {
                 for(String key : item.getComment()) {
                     tempListBook.add(new Book(item.getId(),"","","",key));
                 }
-                _commentWriter.write(tempListBook);
+                commentWriter.write(tempListBook);
             }
         }
 }

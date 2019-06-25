@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListAuthorWriter implements ItemWriter<Book> {
-        private ItemWriter<Book> _authorWriter;
+        private ItemWriter<Book> authorWriter;
 
         public ListAuthorWriter(JdbcBatchItemWriter<Book> authorWriter ) {
-            _authorWriter = authorWriter;
+            this.authorWriter = authorWriter;
         }
 
         @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
@@ -23,7 +23,7 @@ public class ListAuthorWriter implements ItemWriter<Book> {
                 for(String key : item.getAuthor()) {
                     tempListBook.add(new Book(item.getId(),"",key,"",""));
                 }
-                _authorWriter.write(tempListBook);
+                authorWriter.write(tempListBook);
             }
         }
 }

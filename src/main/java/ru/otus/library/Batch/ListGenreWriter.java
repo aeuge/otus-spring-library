@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListGenreWriter implements ItemWriter<Book> {
-        private ItemWriter<Book> _genreWriter;
+        private ItemWriter<Book> genreWriter;
 
         public ListGenreWriter(JdbcBatchItemWriter<Book> genreWriter ) {
-            _genreWriter = genreWriter;
+            this.genreWriter = genreWriter;
         }
 
         @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
@@ -24,7 +24,7 @@ public class ListGenreWriter implements ItemWriter<Book> {
                 for(String key : item.getGenre()) {
                     tempListBook.add(new Book(item.getId(),"","",key,""));
                 }
-                _genreWriter.write(tempListBook);
+                genreWriter.write(tempListBook);
             }
         }
 }
