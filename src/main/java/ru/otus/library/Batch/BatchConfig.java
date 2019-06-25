@@ -10,17 +10,21 @@ import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.data.builder.MongoItemReaderBuilder;
 import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilder;
+import org.springframework.batch.item.support.CompositeItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import ru.otus.library.domain.Book;
 
 import javax.sql.DataSource;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -60,15 +64,52 @@ public class BatchConfig {
     }
 
     @Bean
-    public JdbcBatchItemWriter<Book> writer() {
+    @Primary
+    public ItemWriter<Book> MultiTableJdbcWriter() {
+        CompositeItemWriter cWriter = new CompositeItemWriter();
+        cWriter.setDelegates(Arrays.asList(bookWriter(),new ListAuthorWriter(authorWriter()),new ListCommentWriter(commentWriter()),new ListGenreWriter(genreWriter())));
+        return cWriter;
+    }
+
+    @Bean
+    public JdbcBatchItemWriter<Book> bookWriter() {
         return new JdbcBatchItemWriterBuilder<Book>()
                 .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
                 .sql("INSERT INTO book (book_id, title) VALUES (:id, :title)")
+                .dataSource(dataSource)
+                .build();
+
+    }
+
+    @Bean
+    public JdbcBatchItemWriter<Book> authorWriter() {
+        return new JdbcBatchItemWriterBuilder<Book>()
+                .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
                 .sql("INSERT INTO author (fk_book, author) VALUES (:id, :author)")
                 //.sql("INSERT INTO comment (fk_book, comment) VALUES (:id, :comment)")
                 .dataSource(dataSource)
                 .build()
         ;
+    }
+
+    @Bean
+    public JdbcBatchItemWriter<Book> commentWriter() {
+        return new JdbcBatchItemWriterBuilder<Book>()
+                .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
+                .sql("INSERT INTO comment (fk_book, comment) VALUES (:id, :comment)")
+                .dataSource(dataSource)
+                .build()
+                ;
+    }
+
+    @Bean
+    public JdbcBatchItemWriter<Book> genreWriter() {
+        return new JdbcBatchItemWriterBuilder<Book>()
+                .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
+                .sql("INSERT INTO genre (fk_book, genre) VALUES (:id, :genre)")
+                .dataSource(dataSource)
+                .build()
+                ;
     }
 
     @Bean
@@ -91,7 +132,7 @@ public class BatchConfig {
     }
 
     @Bean
-    public Step step1(JdbcBatchItemWriter writer, ItemReader reader, ItemProcessor itemProcessor) {
+    public Step step1(ItemWriter writer, ItemReader reader, ItemProcessor itemProcessor) {
         return stepBuilderFactory.get("step1")
                 .chunk(5)
                 .reader(reader)
