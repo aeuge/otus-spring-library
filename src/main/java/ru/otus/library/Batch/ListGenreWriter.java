@@ -16,7 +16,6 @@ public class ListGenreWriter implements ItemWriter<Book> {
             this.genreWriter = genreWriter;
         }
 
-        @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
         public void write(List<? extends Book> items) throws Exception
         {
             for ( Book item : items ) {

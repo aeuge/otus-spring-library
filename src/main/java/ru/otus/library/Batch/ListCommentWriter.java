@@ -15,8 +15,7 @@ public class ListCommentWriter implements ItemWriter<Book> {
         public ListCommentWriter ( JdbcBatchItemWriter<Book> commentWriter ) {
             this.commentWriter = commentWriter;
         }
-
-        @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+        
         public void write(List<? extends Book> items) throws Exception
         {
             for ( Book item : items ) {

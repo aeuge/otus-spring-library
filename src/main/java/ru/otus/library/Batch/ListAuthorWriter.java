@@ -16,7 +16,6 @@ public class ListAuthorWriter implements ItemWriter<Book> {
             this.authorWriter = authorWriter;
         }
 
-        @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
         public void write(List<? extends Book> items) throws Exception {
             for ( Book item : items ) {
                 ArrayList<Book> tempListBook = new ArrayList<Book>();
