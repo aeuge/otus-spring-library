@@ -34,12 +34,12 @@ public class InitUsersService {
         LibraryUsers admin = new LibraryUsers("admin", adminpassword, List.of(privilege, privilege3, privilege4));
         LibraryUsers user = new LibraryUsers("user", userpassword, List.of(privilege2, privilege3));
         privilegeRepository.deleteAll().subscribe();
+        usersRepository.deleteAll().subscribe();
+        sleep(1000);
         privilegeRepository.save(privilege).subscribe();
         privilegeRepository.save(privilege2).subscribe();
         privilegeRepository.save(privilege3).subscribe();
         privilegeRepository.save(privilege4).subscribe();
-        usersRepository.deleteAll().subscribe();
-        sleep(1000);
         usersRepository.save(admin).subscribe();
         usersRepository.save(user).subscribe();
     }

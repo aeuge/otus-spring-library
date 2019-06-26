@@ -28,4 +28,11 @@ public class Book {
         this.title = title;
     }
 
+    public Book(String id, String title, String author, String genre, String comment) {
+        this.id = id;
+        this.title = title;
+        this.author.add(author);
+        this.genre.add(genre);
+        this.comment.add(comment);
+    }
 }
