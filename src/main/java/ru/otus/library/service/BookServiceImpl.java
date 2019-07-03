@@ -9,6 +9,10 @@ import ru.otus.library.domain.Comment;
 import ru.otus.library.domain.Genre;
 import ru.otus.library.repository.BookRepository;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 @Service
 public class BookServiceImpl implements BookService {
     private BookRepository dao;
@@ -46,7 +50,19 @@ public class BookServiceImpl implements BookService {
     public Mono<Book> saveBook(Book book) { return dao.save(book); }
 
     @Override
-    public Flux<Book> getAll() { return dao.findAll(); }
+    public Flux<Book> getAll() {
+        Flux<Book> find = dao.findAll();
+        List<Book> books = new ArrayList<>();
+        //find.subscribe(System.out::println);
+        find.subscribe(books::add);
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        books.forEach(System.out::println);
+        return find;
+    }
 
     @Override
     public Flux<Genre> getAllGenre() { return dao.findAllGenre(); }
