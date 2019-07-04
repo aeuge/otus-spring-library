@@ -1,11 +1,10 @@
 package ru.otus.library.service;
 
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import ru.otus.library.Main;
 import ru.otus.library.channel.BookAnalizer;
 import ru.otus.library.domain.Author;
 import ru.otus.library.domain.Book;
@@ -14,13 +13,13 @@ import ru.otus.library.domain.Genre;
 import ru.otus.library.repository.BookRepository;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class BookServiceImpl implements BookService {
     private BookRepository dao;
+    @Autowired
+    private ApplicationContext appContext;
 
     public BookServiceImpl(BookRepository dao) { this.dao = dao; }
 
@@ -57,20 +56,18 @@ public class BookServiceImpl implements BookService {
     @Override
     public Flux<Book> getAll() {
         Flux<Book> find = dao.findAll();
+        Flux<Book> find2 = dao.findAll();
         List<Book> books = new ArrayList<>();
         //find.subscribe(System.out::println);
-        //books = find.map(b->{return books.add(b)});
-        find.subscribe(books::add);
+        find2.subscribe(books::add);
         try {
             Thread.sleep(100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        books.forEach(System.out::println);
+        //books.forEach(System.out::println);
 
-        AbstractApplicationContext ctx = new AnnotationConfigApplicationContext(Main.class);
-
-        BookAnalizer bookAnalizer = ctx.getBean(BookAnalizer.class);
+        BookAnalizer bookAnalizer = appContext.getBean(BookAnalizer.class);
 
         bookAnalizer.processBook(books);
         return find;

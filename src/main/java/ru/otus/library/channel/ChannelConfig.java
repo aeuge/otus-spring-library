@@ -27,7 +27,12 @@ public class ChannelConfig {
     }
 
     @Bean
-    public PublishSubscribeChannel foodChannel() {
+    public PublishSubscribeChannel interestingBookChannel() {
+        return MessageChannels.publishSubscribe().get();
+    }
+
+    @Bean
+    public PublishSubscribeChannel nonInterestingBookChannel() {
         return MessageChannels.publishSubscribe().get();
     }
 
@@ -47,14 +52,14 @@ public class ChannelConfig {
     @Bean
     public IntegrationFlow bookFlowInteresting() {
         return IntegrationFlows.from("interestingBookChannel")
-                .handle("BookInterestingService", "isInteresting")
+                .handle("bookInterestingService", "isInteresting")
                 .get();
     }
 
     @Bean
     public IntegrationFlow bookFlowNonInteresting() {
         return IntegrationFlows.from("nonInterestingBookChannel")
-                .handle("BookInterestingService", "isNonInteresting")
+                .handle("bookInterestingService", "isNonInteresting")
                 .get();
     }
 

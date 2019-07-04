@@ -3,7 +3,6 @@ package ru.otus.library.channel;
 import org.springframework.stereotype.Service;
 import ru.otus.library.domain.Book;
 
-
 @Service
 public class BookInterestingService {
     public void isInteresting (Book book) {
