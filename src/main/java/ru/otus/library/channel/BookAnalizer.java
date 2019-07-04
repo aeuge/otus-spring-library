@@ -11,8 +11,11 @@ import java.util.Collection;
 public interface BookAnalizer {
 
     @Gateway(requestChannel = "bookChannel")
-    Book process(Collection<Book> books);
+    Book processBook(Collection<Book> books);
 
     @Gateway(requestChannel = "interestingBookChannel")
-    Book process2(Book book);
+    Book processInterestingBook(Book book);
+
+    @Gateway(requestChannel = "nonInterestingBookChannel")
+    Book processNonINterestingBook(Book book);
 }
