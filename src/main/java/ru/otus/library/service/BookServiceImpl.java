@@ -18,10 +18,12 @@ import java.util.List;
 @Service
 public class BookServiceImpl implements BookService {
     private BookRepository dao;
-    @Autowired
-    private ApplicationContext appContext;
+    private BookAnalizer bookAnalizer;
 
-    public BookServiceImpl(BookRepository dao) { this.dao = dao; }
+    public BookServiceImpl(BookRepository dao, BookAnalizer bookAnalizer) {
+        this.dao = dao;
+        this.bookAnalizer = bookAnalizer;
+    }
 
     @Override
     public Mono<Book> getByTitleExact(String title) {
@@ -56,18 +58,15 @@ public class BookServiceImpl implements BookService {
     @Override
     public Flux<Book> getAll() {
         Flux<Book> find = dao.findAll();
-        Flux<Book> find2 = dao.findAll();
         List<Book> books = new ArrayList<>();
         //find.subscribe(System.out::println);
-        find2.subscribe(books::add);
+        find.subscribe(books::add);
         try {
             Thread.sleep(100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         //books.forEach(System.out::println);
-
-        BookAnalizer bookAnalizer = appContext.getBean(BookAnalizer.class);
 
         bookAnalizer.processBook(books);
         return find;
