@@ -10,7 +10,7 @@ import java.util.Collection;
 public interface BookAnalizer {
 
     @Gateway(requestChannel = "booksChannel")
-    Book processBook(Collection<Book> books);
+    void processBook(Collection<Book> books);
 
     @Gateway(requestChannel = "interestingBookChannel")
     Book processInterestingBook(Book book);

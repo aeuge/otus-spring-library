@@ -45,7 +45,7 @@ public class ChannelConfig {
     public IntegrationFlow bookFlow() {
         return IntegrationFlows.from("booksChannel")
                 .split()
-                .routeToRecipients(r -> r.recipient("interestingBookChannel", this::isInteresting).recipient("nonInterestingBookChannel", this::isTrue))
+                .routeToRecipients(r -> r.recipient("interestingBookChannel", this::isInteresting).recipient("nonInterestingBookChannel", this::notInteresting))
                 .get();
     }
 
@@ -65,11 +65,15 @@ public class ChannelConfig {
 
     boolean isInteresting(Book book) {
         boolean isInteresting = false;
-        for (String foo : book.getGenre()) {if (foo=="Фантастика") {isInteresting=true;}}
+        for (String foo : book.getGenre()) {
+            if (foo.equals("Фантастика")) {
+                isInteresting=true;
+            }
+        }
         return isInteresting;
     }
 
-    boolean isTrue(Book book) {
-        return true;
+    boolean notInteresting(Book book) {
+        return !isInteresting(book);
     }
 }
