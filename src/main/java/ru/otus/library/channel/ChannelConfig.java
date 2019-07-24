@@ -64,13 +64,7 @@ public class ChannelConfig {
     }
 
     boolean isInteresting(Book book) {
-        boolean isInteresting = false;
-        for (String foo : book.getGenre()) {
-            if (foo.equals("Фантастика")) {
-                isInteresting=true;
-            }
-        }
-        return isInteresting;
+        return book.getGenre().stream().anyMatch(g -> g.equalsIgnoreCase("Фантастика"));
     }
 
     boolean notInteresting(Book book) {
