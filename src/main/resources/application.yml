@@ -15,3 +15,20 @@ spring:
       platform: postgresql
       validationQuery: SELECT 1
       schema: classpath:/schema.sql
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+        exclude: beans
+  endpoint:
+    health:
+      show-details: always
+info:
+  application:
+    name: spring-actuator
+    description: spring boot actuator application
+    version: 1.0
+logging:
+  file: test.log
+
