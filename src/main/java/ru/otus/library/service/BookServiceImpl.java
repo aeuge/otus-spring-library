@@ -1,19 +1,29 @@
 package ru.otus.library.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import ru.otus.library.channel.BookAnalizer;
 import ru.otus.library.domain.Author;
 import ru.otus.library.domain.Book;
 import ru.otus.library.domain.Comment;
 import ru.otus.library.domain.Genre;
 import ru.otus.library.repository.BookRepository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class BookServiceImpl implements BookService {
     private BookRepository dao;
+    private BookAnalizer bookAnalizer;
 
-    public BookServiceImpl(BookRepository dao) { this.dao = dao; }
+    public BookServiceImpl(BookRepository dao, BookAnalizer bookAnalizer) {
+        this.dao = dao;
+        this.bookAnalizer = bookAnalizer;
+    }
 
     @Override
     public Mono<Book> getByTitleExact(String title) {
@@ -46,7 +56,21 @@ public class BookServiceImpl implements BookService {
     public Mono<Book> saveBook(Book book) { return dao.save(book); }
 
     @Override
-    public Flux<Book> getAll() { return dao.findAll(); }
+    public Flux<Book> getAll() {
+        Flux<Book> find = dao.findAll();
+        List<Book> books = new ArrayList<>();
+        //find.subscribe(System.out::println);
+        find.subscribe(books::add);
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        //books.forEach(System.out::println);
+
+        bookAnalizer.processBook(books);
+        return find;
+    }
 
     @Override
     public Flux<Genre> getAllGenre() { return dao.findAllGenre(); }
