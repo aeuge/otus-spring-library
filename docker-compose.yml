@@ -1,0 +1,17 @@
+version : '3'
+services:
+ mongo:
+  image: mymongo
+  ports: 
+   - 27017:27017
+  deploy:
+   restart_policy:
+    condition : on-failure
+ library:
+  image: mylibrary
+  ports: 
+   - 8080:8080
+   - "27017"
+  deploy:
+   restart_policy:
+    condition : on-failure

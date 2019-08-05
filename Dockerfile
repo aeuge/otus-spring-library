@@ -15,6 +15,7 @@ WORKDIR /app
 COPY --from=0 /app/target/ /app
 
 EXPOSE 8080
+EXPOSE 27017
 
 CMD ["java","-jar","otus-spring-library-1.0.jar"] 
 #CMD ["ls"] 
