@@ -1,0 +1,5 @@
+cd mongo
+docker build -t mymongo .
+cd ..
+docker build -t mylibrary .
+docker-compose up

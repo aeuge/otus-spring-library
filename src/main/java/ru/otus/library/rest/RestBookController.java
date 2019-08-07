@@ -33,14 +33,14 @@ public class RestBookController {
 
     @GetMapping("/api/book/{id}")
     @PreAuthorize("@reactivePermissionEvaluator.hasPermission(#principal, 'book', 'write')")
-    public Mono<BookDto> getBook(@PathVariable String id) {
+    public Mono<BookDto> getBook(@PathVariable String id, @AuthenticationPrincipal(expression = "principal") Principal principal) {
         return service.getById(id).map(ConverterBookToDto::toDto);
     }
 
     @DeleteMapping("/book/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public Mono<Void> deleteBook(@PathVariable String id) {
+    public Mono<Void> deleteBook(@PathVariable String id, @AuthenticationPrincipal(expression = "principal") Principal principal) {
         return service.deleteBook(id);
     }
 

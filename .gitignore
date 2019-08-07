@@ -3,3 +3,6 @@
 /target/
 *.log
 *.csv
+*.log.2019-08-02.0.gz
+*.log.2019-08-03.0.gz
+*.log.*.gz
