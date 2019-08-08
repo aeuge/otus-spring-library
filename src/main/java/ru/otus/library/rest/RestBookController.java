@@ -1,6 +1,7 @@
 package ru.otus.library.rest;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,7 +27,8 @@ public class RestBookController {
 
     @GetMapping("/api/allbooks")
     @PreAuthorize("@reactivePermissionEvaluator.hasPermission(#principal, 'book', 'read')")
-    @HystrixCommand(fallbackMethod = "getDefaultBooks", groupKey = "BookService", commandKey = "findAll")
+    @HystrixCommand(fallbackMethod = "getDefaultBooks", groupKey = "BookService", commandKey = "findAll", commandProperties = {
+            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "500")})
     public Flux<BookDto> getAllBooks(@AuthenticationPrincipal(expression = "principal") Principal principal) throws InterruptedException {
         System.out.println("Privileges: " + ((Authentication) principal).getAuthorities());
         Thread.sleep(10000);
