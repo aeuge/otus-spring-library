@@ -1,5 +1,7 @@
 package ru.otus.library.rest;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,15 +26,18 @@ public class RestBookController {
     }
 
     @GetMapping("/api/allbooks")
-    //@PreAuthorize("hasPermission(returnObject, 'read')")
     @PreAuthorize("@reactivePermissionEvaluator.hasPermission(#principal, 'book', 'read')")
-    public Flux<BookDto> getAllBooks(@AuthenticationPrincipal(expression = "principal") Principal principal) {
+    @HystrixCommand(fallbackMethod = "getDefaultBooks", groupKey = "BookService", commandKey = "findAll", commandProperties = {
+            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "500")})
+    public Flux<BookDto> getAllBooks(@AuthenticationPrincipal(expression = "principal") Principal principal) throws InterruptedException {
         System.out.println("Privileges: " + ((Authentication) principal).getAuthorities());
+        Thread.sleep(10000);
         return service.getAll().map(ConverterBookToDto::toDto);
     }
 
     @GetMapping("/api/book/{id}")
     @PreAuthorize("@reactivePermissionEvaluator.hasPermission(#principal, 'book', 'write')")
+    @HystrixCommand(groupKey = "BookService", commandKey = "findBook")
     public Mono<BookDto> getBook(@PathVariable String id, @AuthenticationPrincipal(expression = "principal") Principal principal) {
         return service.getById(id).map(ConverterBookToDto::toDto);
     }
@@ -40,12 +45,14 @@ public class RestBookController {
     @DeleteMapping("/book/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @HystrixCommand(groupKey = "BookService", commandKey = "deleteBook")
     public Mono<Void> deleteBook(@PathVariable String id, @AuthenticationPrincipal(expression = "principal") Principal principal) {
         return service.deleteBook(id);
     }
 
     @PostMapping("/api/book/{id}")
     @PreAuthorize("@reactivePermissionEvaluator.hasPermission(#principal, 'book', 'write')")
+    @HystrixCommand(groupKey = "BookService", commandKey = "saveBook")
     public Mono<Book> saveBook(@RequestBody BookDto bookDto, @AuthenticationPrincipal(expression = "principal") Principal principal) {
         return service.getById(bookDto.getId()).switchIfEmpty(Mono.just(new Book()))
                 .map(v -> {
@@ -57,4 +64,7 @@ public class RestBookController {
                 }).flatMap(service::saveBook);
     }
 
+    public Flux<BookDto> getDefaultBooks(@AuthenticationPrincipal(expression = "principal") Principal principal) {
+        return Flux.just(new BookDto("Конституция"));
+    }
 }
